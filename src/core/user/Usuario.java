@@ -16,8 +16,8 @@ public class Usuario {
 	private boolean logado;
 	private Mural mural;
 	/**
-	 * Esta lista representa os pedidos de amizade que outros usuarios me
-	 * fizeram mas eu ainda não aceitei
+	 * Esta lista representa os pedidos de amizade que outros usuarios
+	 * fazem ao atual usuário mas que ainda não foram aceitos.
 	 */
 	private List<Usuario> pedidosDeAmizadePedente;
 	private List<Usuario> amigos;
@@ -136,6 +136,14 @@ public class Usuario {
 	
 	public int getPopularidade() {
 		return mural.calculaPopularidade();
+	}
+	
+	public void curtirPost(Post post) {
+		post.curtir();
+	}
+	
+	public void reijeitarPost(Post post) {
+		post.rejeitar();
 	}
 
 	@Override
