@@ -145,6 +145,10 @@ public class Usuario {
 	public void reijeitarPost(Post post) {
 		post.rejeitar();
 	}
+	
+	public String getEmail() {
+		return email;
+	}
 
 	@Override
 	public int hashCode() {
