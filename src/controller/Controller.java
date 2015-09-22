@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import core.Usuario;
@@ -7,6 +8,10 @@ import core.Usuario;
 public class Controller {
 	
 	List<Usuario>usuarios;
+	
+	public Controller() {
+		usuarios = new ArrayList<Usuario>();
+	}
 	
 	public void adicionarUsuario(Usuario usuario) {
 		this.usuarios.add(usuario);
