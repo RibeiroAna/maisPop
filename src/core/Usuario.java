@@ -1,8 +1,12 @@
-package core.user;
+package core;
 
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import core.Mural;
+import core.Post;
+import core.Usuario;
 
 public class Usuario {
 

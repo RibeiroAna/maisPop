@@ -1,4 +1,4 @@
-package core.user;
+package core;
 
 import java.util.Date;
 import java.util.List;

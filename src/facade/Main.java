@@ -9,7 +9,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		 List<String> testes = new ArrayList<String>();
-		 MaisPopFacade facade = new MaisPopFacade();
+		 Facade facade = new Facade();
 		 
 		 testes.add("easyAccept/teste_aceitacao/usecase_1.txt");
 		 testes.add("easyAccept/teste_aceitacao/usecase_2.txt");

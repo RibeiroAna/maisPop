@@ -1,10 +1,10 @@
-package core.management;
+package controller;
 
 import java.util.List;
 
-import core.user.Usuario;
+import core.Usuario;
 
-public class MaisPopController {
+public class Controller {
 	
 	List<Usuario>usuarios;
 	

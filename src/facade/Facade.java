@@ -1,13 +1,13 @@
 package facade;
 
-import core.management.MaisPopController;
+import controller.Controller;
 
-public class MaisPopFacade {
+public class Facade {
 	
-	private MaisPopController sistemaPop;
+	private Controller controller;
 	
-	public MaisPopFacade(){
-		sistemaPop = new MaisPopController ();
+	public Facade(){
+		controller = new Controller ();
 	}
 	
 	public void iniciaSistema(){
@@ -18,15 +18,15 @@ public class MaisPopFacade {
 	}
 	
 	public void login(String email, String senha) throws Exception{
-		sistemaPop.login(email, senha);
+		controller.login(email, senha);
 	}
 	
 	public void logout() throws Exception{
-		sistemaPop.logout();
+		controller.logout();
 	}
 	
 	public String cadastraUsuario(String nome, String email, String senha, String dataNasc, String imagem) throws Exception{
-		return sistemaPop.cadastraUsuario(nome, email, senha, dataNasc, imagem);
+		return controller.cadastraUsuario(nome, email, senha, dataNasc, imagem);
 	}
 	
 	public String cadastraUsuario(String nome, String email, String senha, String dataNasc) throws Exception{
@@ -34,15 +34,15 @@ public class MaisPopFacade {
 	}
 	
 	public String getInfoUsuario(String atributo) throws Exception{
-		return sistemaPop.getInfoUsuario(atributo);
+		return controller.getInfoUsuario(atributo);
 	}
 	
 	public String getInfoUsuario(String atributo, String usuario) throws Exception{
-		return sistemaPop.getInfoUsuario(atributo, usuario);
+		return controller.getInfoUsuario(atributo, usuario);
 	}
 	
 	public void removeUsuario(String email) throws Exception{
-		sistemaPop.removeUsuario(email);
+		controller.removeUsuario(email);
 	}
 	
 	public void atualizaPerfil(String atributo, String valor) throws Exception{

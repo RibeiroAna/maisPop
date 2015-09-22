@@ -1,7 +1,9 @@
-package core.user;
+package core;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import core.Post;
 
 public class Mural {
 
