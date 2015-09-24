@@ -3,58 +3,72 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.Usuario;
+import utils.MensagensDeErro;
+import core.usuario.AtributoUsuario;
+import core.usuario.Usuario;
+import exceptions.naoTrataveis.NotFoundException;
+import exceptions.trataveis.UnauthorizedException;
 
 public class Controller {
-	
-	List<Usuario>usuarios;
-	
+
+	List<Usuario> usuarios;
+
 	public Controller() {
 		usuarios = new ArrayList<Usuario>();
 	}
-	
+
 	public void adicionarUsuario(Usuario usuario) {
 		this.usuarios.add(usuario);
 	}
-	
-	public Usuario buscarUsuario(String email) {
+
+	private Usuario getUsuarioByEmail(String email) {
 		for (Usuario usuario : usuarios) {
-			if (usuario.getEmail() == email) {
+			if (usuario.getEmail().equals(email)) {
 				return usuario;
 			}
 		}
-		//TODO melhorar as exceções
-		throw new RuntimeException();
+		String mensagem = String.format(
+				MensagensDeErro.GET_DADOS_EMAIL_NOT_FOUND.getMessage(), email);
+		throw new NotFoundException(mensagem);
 	}
 
-	public void login(String email, String senha) {
-		// TODO Auto-generated method stub
-		
+	public Usuario login(String email, String senha)
+			throws UnauthorizedException {
+		Usuario usuario;
+		try {
+			usuario = getUsuarioByEmail(email);
+		} catch (NotFoundException e) {
+			String mensagem = String.format
+					(MensagensDeErro.LOGIN_ERROR_NOT_FOUND.getMessage(), email);
+			throw new NotFoundException(mensagem);
+		}
+		usuario.login(email, senha);
+		return usuario;
 	}
 
-	public void logout() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public String cadastraUsuario(String nome, String email, String senha,
+	public void cadastraUsuario(String nome, String email, String senha,
 			String dataNasc, String imagem) {
-		// TODO Auto-generated method stub
+		Usuario usuario = new Usuario(nome, email, senha, dataNasc, imagem);
+		usuarios.add(usuario);
+	}
+
+	public AtributoUsuario strToAtributo(String atributoStr) {
+		AtributoUsuario[] atributos = AtributoUsuario.values();
+		for (AtributoUsuario atributoUsuario : atributos) {
+			if (atributoUsuario.getAtributo().equals(atributoStr)) {
+				return atributoUsuario;
+			}
+		}
 		return null;
 	}
 
-	public String getInfoUsuario(String atributo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getInfoUsuario(String atributo, String usuario) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getInfoUsuario(String atributo, String email) throws Exception {
+		Usuario usuario = getUsuarioByEmail(email);
+		return usuario.getAtributo(strToAtributo(atributo));
 	}
 
 	public void removeUsuario(String email) {
-		// TODO Auto-generated method stub
-		
+		Usuario usuario = getUsuarioByEmail(email);
+		usuarios.remove(usuario);
 	}
 }
