@@ -1,31 +1,38 @@
-package facade;
+package management;
 
 import utils.MensagensDeErro;
-import controller.Controller;
 import core.usuario.AtributoUsuario;
 import core.usuario.Usuario;
 import exceptions.naoTrataveis.BadRequestException;
 import exceptions.trataveis.UnauthorizedException;
 
+/**
+ * @author ana
+ *
+ */
 public class Facade {
 
 	private Controller controller;
 	private Usuario usuarioLogado;
+	
+	private static final String DEFAULT_PROFILE_IMAGE_PATH = "resources/default.jpg";
 
 	public void iniciaSistema() {
 		controller = new Controller();
+		//TODO leitura de dados
 	}
 
 	public void fechaSistema() throws Exception {
 		if (usuarioLogado != null) {
 			throw new BadRequestException(MensagensDeErro.FECHA_SISTEMA_COM_USUARIO);
 		}
+		//TODO gravar dados
 		controller = null;
 	}
 
 	public void login(String email, String senha) throws Exception {
 		if (usuarioLogado != null) {
-			String mensagem = String.format(MensagensDeErro.LOGIN_USUARIO_LOGADO.getMessage(), 
+			String mensagem = String.format(MensagensDeErro.LOGIN_USUARIO_LOGADO.getMesagem(), 
 					usuarioLogado.getAtributo(AtributoUsuario.NOME));
 			throw new UnauthorizedException(mensagem);
 		}
@@ -39,15 +46,24 @@ public class Facade {
 		usuarioLogado = null;
 	}
 
-	public String cadastraUsuario(String nome, String email, String senha,
+	/**
+	 * @param nome
+	 * @param email
+	 * @param senha
+	 * @param dataNasc
+	 * @param imagem
+	 * @return O id único do usuário, que no caso é o email
+	 * @throws Exception
+	 */
+	public String cadastrarUsuario(String nome, String email, String senha,
 			String dataNasc, String imagem) throws Exception {
-		controller.cadastraUsuario(nome, email, senha, dataNasc, imagem);
+		controller.cadastrarUsuario(nome, email, senha, dataNasc, imagem);
 		return email;
 	}
 
 	public String cadastraUsuario(String nome, String email, String senha,
 			String dataNasc) throws Exception {
-		return cadastraUsuario(nome, email, senha, dataNasc, null);
+		return cadastrarUsuario(nome, email, senha, dataNasc, DEFAULT_PROFILE_IMAGE_PATH);
 	}
 
 	public String getInfoUsuario(String atributo) throws Exception {

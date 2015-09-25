@@ -25,7 +25,7 @@ public enum MensagensDeErro {
 		this.mensagem = mensagem;
 	}
 
-	public String getMessage(){
+	public String getMesagem(){
 		return mensagem;
 	}
 

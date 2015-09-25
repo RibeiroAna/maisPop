@@ -11,7 +11,7 @@ public class BadRequestException extends MaisPopExceptionNaoTratavel {
 	}
 
 	public BadRequestException(MensagensDeErro error) {
-		super(error.getMessage());
+		super(error.getMesagem());
 	}
 
 }

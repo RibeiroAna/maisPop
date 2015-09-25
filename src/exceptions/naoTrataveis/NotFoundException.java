@@ -16,7 +16,7 @@ public class NotFoundException extends MaisPopExceptionNaoTratavel {
 	}
 	
 	public NotFoundException(MensagensDeErro error) {
-		super(error.getMessage());
+		super(error.getMesagem());
 	}
 	
 }

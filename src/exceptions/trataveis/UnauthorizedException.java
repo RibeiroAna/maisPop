@@ -6,7 +6,7 @@ import utils.MensagensDeErro;
 public class UnauthorizedException extends MaisPopExceptionTratavel {
 	
 	public UnauthorizedException(MensagensDeErro loginSenhaErrada) {
-		super(loginSenhaErrada.getMessage());
+		super(loginSenhaErrada.getMesagem());
 	}
 	
 	public UnauthorizedException(String loginSenhaErrada) {

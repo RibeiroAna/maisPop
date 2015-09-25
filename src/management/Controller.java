@@ -1,4 +1,4 @@
-package controller;
+package management;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +17,6 @@ public class Controller {
 		usuarios = new ArrayList<Usuario>();
 	}
 
-	public void adicionarUsuario(Usuario usuario) {
-		this.usuarios.add(usuario);
-	}
-
 	private Usuario getUsuarioByEmail(String email) {
 		for (Usuario usuario : usuarios) {
 			if (usuario.getEmail().equals(email)) {
@@ -28,7 +24,7 @@ public class Controller {
 			}
 		}
 		String mensagem = String.format(
-				MensagensDeErro.GET_DADOS_EMAIL_NOT_FOUND.getMessage(), email);
+				MensagensDeErro.GET_DADOS_EMAIL_NOT_FOUND.getMesagem(), email);
 		throw new NotFoundException(mensagem);
 	}
 
@@ -39,20 +35,24 @@ public class Controller {
 			usuario = getUsuarioByEmail(email);
 		} catch (NotFoundException e) {
 			String mensagem = String.format
-					(MensagensDeErro.LOGIN_ERROR_NOT_FOUND.getMessage(), email);
+					(MensagensDeErro.LOGIN_ERROR_NOT_FOUND.getMesagem(), email);
 			throw new NotFoundException(mensagem);
 		}
 		usuario.login(email, senha);
 		return usuario;
 	}
 
-	public void cadastraUsuario(String nome, String email, String senha,
+	public void cadastrarUsuario(String nome, String email, String senha,
 			String dataNasc, String imagem) {
 		Usuario usuario = new Usuario(nome, email, senha, dataNasc, imagem);
 		usuarios.add(usuario);
 	}
 
-	public AtributoUsuario strToAtributo(String atributoStr) {
+	/**
+	 * @param atributoStr é a string que o usuário digita como atributo
+	 * @return um atributo no formato de atributo de usuário
+	 */
+	private AtributoUsuario strToAtributo(String atributoStr) {
 		AtributoUsuario[] atributos = AtributoUsuario.values();
 		for (AtributoUsuario atributoUsuario : atributos) {
 			if (atributoUsuario.getAtributo().equals(atributoStr)) {

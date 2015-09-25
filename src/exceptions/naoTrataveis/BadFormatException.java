@@ -11,7 +11,7 @@ public class BadFormatException extends MaisPopExceptionNaoTratavel {
 	}
 
 	public BadFormatException(MensagensDeErro loginErrorNotFound) {
-		super(loginErrorNotFound.getMessage());
+		super(loginErrorNotFound.getMesagem());
 	}
 
 }

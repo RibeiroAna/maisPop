@@ -11,8 +11,6 @@ import exceptions.trataveis.UnauthorizedException;
 
 public class Usuario {
 
-	private static final String DEFAULT_PROFILE_IMAGE_PATH = "resources/default.jpg";
-
 	private String nome;
 	private String senha;
 	private String email;
@@ -29,12 +27,10 @@ public class Usuario {
 
 	public Usuario(String nome, String email, String senha,
 			String dataNascimento, String imagemPath) {
-		if (imagemPath == null) {
-			this.imagemPerfilPath = DEFAULT_PROFILE_IMAGE_PATH;
-		} else {
-			this.imagemPerfilPath = imagemPath;
-		}
+		
 		validaDados(nome, email, dataNascimento);
+		
+		this.imagemPerfilPath = imagemPath;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
