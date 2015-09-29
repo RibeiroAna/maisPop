@@ -15,6 +15,7 @@ public class MensagensDeErro {
 	public static final String CAUSA_USUARIO_AINDA_LOGADO = "Um usuarix ainda esta logadx."; 
 	
 	public static final String CAUSA_NOME_VAZIO = "Nome dx usuarix nao pode ser vazio.";
+	public static final String CAUSA_SENHA_INCORRETA = "A senha fornecida esta incorreta.";
 	public static final String CAUSA_EMAIL_ERRADO = "Formato de e-mail esta invalido.";
 	public static final String CAUSA_FORMATO_DATA_INVALIDA = "Formato de data esta invalida.";
 	public static final String CAUSA_FORMATO_DATA_INEXISTENTE = "Data nao existe.";

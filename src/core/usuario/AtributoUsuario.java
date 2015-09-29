@@ -2,7 +2,8 @@ package core.usuario;
 
 public enum AtributoUsuario {
 
-	NOME("Nome"), DATA_NASC("Data de Nascimento"), SENHA("Senha"), FOTO("Foto");
+	NOME("Nome"), DATA_NASC("Data de Nascimento"), SENHA("Senha"),
+	FOTO("Foto"), EMAIL("E-mail");
 
 	private final String atributo;
 

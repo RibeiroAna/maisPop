@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import core.Mural;
-import core.Post;
 import utils.MensagensDeErro;
 import utils.ValidaDados;
+import core.Mural;
+import core.Post;
+import exceptions.naoTrataveis.BadRequestException;
 import exceptions.trataveis.UnauthorizedException;
 
 public class Usuario implements Serializable{
@@ -68,26 +69,8 @@ public class Usuario implements Serializable{
 		if ((senhaAntiga == senha) && (novaSenha != null)) {
 			senha = novaSenha;
 		} else {
-			// TODO tratar melhor as exceções com hierarquias de exception, etc
-			throw new RuntimeException();
-		}
-	}
-
-	public void atualizarNome(String novoNome) {
-		if ((novoNome != null)) {
-			nome = novoNome;
-		} else {
-			// TODO tratar melhor as exceções com hierarquias de exception, etc
-			throw new RuntimeException();
-		}
-	}
-
-	public void atualizarEmail(String novoEmail) {
-		if ((novoEmail != null)) {
-			email = novoEmail;
-		} else {
-			// TODO tratar melhor as exceções com hierarquias de exception, etc
-			throw new RuntimeException();
+			throw new BadRequestException(MensagensDeErro.ERROR_ATUALIZA, 
+					MensagensDeErro.CAUSA_SENHA_INCORRETA);
 		}
 	}
 
@@ -162,6 +145,8 @@ public class Usuario implements Serializable{
 			throw new UnauthorizedException(MensagensDeErro.CAUSA_USUARIO_SENHA_PROTEGIDA);
 		case FOTO:
 			return imagemPerfilPath;
+		default:
+			break;
 		}
 		return null;
 	}
@@ -171,13 +156,19 @@ public class Usuario implements Serializable{
 		case NOME:
 			ValidaDados.validaNome(nome, MensagensDeErro.ERROR_ATUALIZA);
 			nome = valor;
+			break;
 		case DATA_NASC:
 			ValidaDados.validaNome(dataNascimento, MensagensDeErro.ERROR_ATUALIZA);
 			dataNascimento = valor;
-		case SENHA:
-			senha = valor;
+			break;
 		case FOTO:
 			imagemPerfilPath = valor;
+			break;
+		case EMAIL:
+			email = valor;
+			break;
+		default:
+			break;
 		}
 	}
 
