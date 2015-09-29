@@ -1,5 +1,10 @@
 package management;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import utils.MensagensDeErro;
 import core.usuario.AtributoUsuario;
 import core.usuario.Usuario;
@@ -16,32 +21,56 @@ public class Facade {
 	private Usuario usuarioLogado;
 	
 	private static final String DEFAULT_PROFILE_IMAGE_PATH = "resources/default.jpg";
+	private static final String FILE_SYSTEM_PATH = "backupSistema/sistemaPop";
 
 	public void iniciaSistema() {
-		controller = new Controller();
-		//TODO leitura de dados
+		try {
+			FileInputStream arquivoLeitura = new FileInputStream(FILE_SYSTEM_PATH);
+			ObjectInputStream objLeitura = new ObjectInputStream(arquivoLeitura);
+			controller = (Controller) objLeitura.readObject();
+			objLeitura.close();
+            arquivoLeitura.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (controller == null) {
+			controller = new Controller();
+		}
 	}
 
-	public void fechaSistema() throws Exception {
+	public void fechaSistema() throws BadRequestException {
 		if (usuarioLogado != null) {
-			throw new BadRequestException(MensagensDeErro.FECHA_SISTEMA_COM_USUARIO);
+			throw new BadRequestException(MensagensDeErro.ERROR_FECHA_SISTEMA,
+					MensagensDeErro.CAUSA_USUARIO_AINDA_LOGADO);
 		}
-		//TODO gravar dados
+		try {
+			FileOutputStream arquivoGrav = new FileOutputStream(FILE_SYSTEM_PATH);
+			ObjectOutputStream objGravar = new ObjectOutputStream(arquivoGrav);	
+			
+            objGravar.writeObject(controller);
+            objGravar.flush();
+            objGravar.close();
+            arquivoGrav.flush();
+            arquivoGrav.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		controller = null;
 	}
 
 	public void login(String email, String senha) throws Exception {
 		if (usuarioLogado != null) {
-			String mensagem = String.format(MensagensDeErro.LOGIN_USUARIO_LOGADO.getMesagem(), 
+			String mensagem = String.format(MensagensDeErro.CAUSA_USUARIO_LOGADO, 
 					usuarioLogado.getAtributo(AtributoUsuario.NOME));
-			throw new UnauthorizedException(mensagem);
+			throw new UnauthorizedException(MensagensDeErro.ERROR_LOGIN, mensagem);
 		}
 		usuarioLogado = controller.login(email, senha);
 	}
 
 	public void logout() throws Exception {
 		if (usuarioLogado == null) {
-			throw new BadRequestException(MensagensDeErro.LOGOUT_SEM_USUARIO);
+			throw new BadRequestException(MensagensDeErro.ERROR_LOGOUT, 
+					MensagensDeErro.CAUSA_USUARIO_DESLOGADO);
 		}
 		usuarioLogado = null;
 	}
@@ -55,7 +84,7 @@ public class Facade {
 	 * @return O id único do usuário, que no caso é o email
 	 * @throws Exception
 	 */
-	public String cadastrarUsuario(String nome, String email, String senha,
+	public String cadastraUsuario(String nome, String email, String senha,
 			String dataNasc, String imagem) throws Exception {
 		controller.cadastrarUsuario(nome, email, senha, dataNasc, imagem);
 		return email;
@@ -63,7 +92,7 @@ public class Facade {
 
 	public String cadastraUsuario(String nome, String email, String senha,
 			String dataNasc) throws Exception {
-		return cadastrarUsuario(nome, email, senha, dataNasc, DEFAULT_PROFILE_IMAGE_PATH);
+		return cadastraUsuario(nome, email, senha, dataNasc, DEFAULT_PROFILE_IMAGE_PATH);
 	}
 
 	public String getInfoUsuario(String atributo) throws Exception {
@@ -80,7 +109,10 @@ public class Facade {
 	}
 
 	public void atualizaPerfil(String atributo, String valor) throws Exception {
-		// sistemaPop.atualizaPerfil(atributo, valor);
+		if (usuarioLogado == null) {
+			//throw new BadRequestException(error);
+		}
+		controller.atualizaPerfil(atributo, valor, usuarioLogado);
 	}
 
 	public void atualizaPerfil(String atributo, String valor, String velhaSenha)

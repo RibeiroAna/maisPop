@@ -7,12 +7,12 @@ import easyaccept.EasyAcceptFacade;
 
 public class Main {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		 List<String> testes = new ArrayList<String>();
 		 Facade facade = new Facade();
 		 
 		 testes.add("easyAccept/teste_aceitacao/usecase_1.txt");
-		 //testes.add("easyAccept/teste_aceitacao/usecase_2.txt");
+		 testes.add("easyAccept/teste_aceitacao/usecase_2.txt");
 		 //testes.add("easyAccept/teste_aceitacao/usecase_3.txt");
 		 //testes.add("easyAccept/teste_aceitacao/usecase_4.txt");
 		 

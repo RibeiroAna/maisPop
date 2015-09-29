@@ -1,5 +1,6 @@
 package core.usuario;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,8 +10,9 @@ import utils.MensagensDeErro;
 import utils.ValidaDados;
 import exceptions.trataveis.UnauthorizedException;
 
-public class Usuario {
+public class Usuario implements Serializable{
 
+	private static final long serialVersionUID = -5997328240008153153L;
 	private String nome;
 	private String senha;
 	private String email;
@@ -48,16 +50,17 @@ public class Usuario {
 	 */
 	private void validaDados(String nome, String email, String dataNasc) {
 		// Validando o nome
-		ValidaDados.validaNome(nome);
+		ValidaDados.validaNome(nome, MensagensDeErro.ERROR_CADASTRO);
 		// validando a data
-		ValidaDados.validaData(dataNasc);
+		ValidaDados.validaData(dataNasc, MensagensDeErro.ERROR_CADASTRO);
 		// Validando o email
-		ValidaDados.validaEmail(email);
+		ValidaDados.validaEmail(email, MensagensDeErro.ERROR_CADASTRO);
 	}
 
 	public void login(String email, String senha) throws UnauthorizedException {
 		if (!senha.equals(this.senha)) {
-			throw new UnauthorizedException(MensagensDeErro.LOGIN_SENHA_ERRADA);
+			throw new UnauthorizedException(MensagensDeErro.ERROR_LOGIN, 
+					MensagensDeErro.CAUSA_USUARIO_SENHA_ERRADA);
 		}
 	}
 
@@ -156,12 +159,26 @@ public class Usuario {
 		case DATA_NASC:
 			return getDataFormatada();
 		case SENHA:
-			throw new UnauthorizedException(
-					MensagensDeErro.GET_DADOS_SENHA_PROTEGIDA);
+			throw new UnauthorizedException(MensagensDeErro.CAUSA_USUARIO_SENHA_PROTEGIDA);
 		case FOTO:
 			return imagemPerfilPath;
 		}
 		return null;
+	}
+	
+	public void setAtributo(AtributoUsuario atributo, String valor) {
+		switch (atributo) {
+		case NOME:
+			ValidaDados.validaNome(nome, MensagensDeErro.ERROR_ATUALIZA);
+			nome = valor;
+		case DATA_NASC:
+			ValidaDados.validaNome(dataNascimento, MensagensDeErro.ERROR_ATUALIZA);
+			dataNascimento = valor;
+		case SENHA:
+			senha = valor;
+		case FOTO:
+			imagemPerfilPath = valor;
+		}
 	}
 
 	public String getEmail() {

@@ -1,5 +1,6 @@
 package management;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +10,18 @@ import core.usuario.Usuario;
 import exceptions.naoTrataveis.NotFoundException;
 import exceptions.trataveis.UnauthorizedException;
 
-public class Controller {
+public class Controller implements Serializable {
 
+	private static final long serialVersionUID = 3227105040361512397L;
 	List<Usuario> usuarios;
 
 	public Controller() {
 		usuarios = new ArrayList<Usuario>();
+	}
+
+	public void atualizaPerfil(String atributo, String valor, Usuario usuario) {
+		usuarios.remove(usuario);
+		usuario.setAtributo(strToAtributo(atributo), valor);
 	}
 
 	private Usuario getUsuarioByEmail(String email) {
@@ -24,7 +31,7 @@ public class Controller {
 			}
 		}
 		String mensagem = String.format(
-				MensagensDeErro.GET_DADOS_EMAIL_NOT_FOUND.getMesagem(), email);
+				MensagensDeErro.CAUSA_USUARIO_NAO_CADASTRADO, email);
 		throw new NotFoundException(mensagem);
 	}
 
@@ -34,9 +41,9 @@ public class Controller {
 		try {
 			usuario = getUsuarioByEmail(email);
 		} catch (NotFoundException e) {
-			String mensagem = String.format
-					(MensagensDeErro.LOGIN_ERROR_NOT_FOUND.getMesagem(), email);
-			throw new NotFoundException(mensagem);
+			String mensagem = String.format(
+					MensagensDeErro.CAUSA_USUARIO_NAO_CADASTRADO, email);
+			throw new NotFoundException(MensagensDeErro.ERROR_LOGIN, mensagem);
 		}
 		usuario.login(email, senha);
 		return usuario;
@@ -49,7 +56,8 @@ public class Controller {
 	}
 
 	/**
-	 * @param atributoStr é a string que o usuário digita como atributo
+	 * @param atributoStr
+	 *            é a string que o usuário digita como atributo
 	 * @return um atributo no formato de atributo de usuário
 	 */
 	private AtributoUsuario strToAtributo(String atributoStr) {
@@ -62,7 +70,8 @@ public class Controller {
 		return null;
 	}
 
-	public String getInfoUsuario(String atributo, String email) throws Exception {
+	public String getInfoUsuario(String atributo, String email)
+			throws Exception {
 		Usuario usuario = getUsuarioByEmail(email);
 		return usuario.getAtributo(strToAtributo(atributo));
 	}

@@ -1,32 +1,21 @@
 package utils;
 
-public enum MensagensDeErro {
+public class MensagensDeErro {	
+	public static final String ERROR_LOGIN = "Nao foi possivel realizar login. ";
+	public static final String ERROR_LOGOUT = "Nao eh possivel realizar logout. ";
+	public static final String ERROR_FECHA_SISTEMA = "Nao foi possivel fechar o sistema. ";
+	public static final String ERROR_CADASTRO = "Erro no cadastro de Usuarios. "; 
+	public static final String ERROR_ATUALIZA = "erro na atualizacao de perfil.";
 	
-	LOGIN_ERROR_NOT_FOUND("Nao foi possivel realizar login. "
-					+ "Um usuarix com email %s nao esta cadastradx."),
-	LOGIN_SENHA_ERRADA ("Nao foi possivel realizar login. Senha invalida."),
-	LOGIN_USUARIO_LOGADO("Nao foi possivel realizar login. Um usuarix ja esta logadx: %s."),
+	public static final String CAUSA_USUARIO_NAO_CADASTRADO = "Um usuarix com email %s nao esta cadastradx.";
+	public static final String CAUSA_USUARIO_SENHA_ERRADA = "Senha invalida.";
+	public static final String CAUSA_USUARIO_SENHA_PROTEGIDA = "A senha dx usuarix eh protegida.";
+	public static final String CAUSA_USUARIO_LOGADO = "Um usuarix ja esta logadx: %s.";
+	public static final String CAUSA_USUARIO_DESLOGADO = "Nenhum usuarix esta logadx no +pop.";
+	public static final String CAUSA_USUARIO_AINDA_LOGADO = "Um usuarix ainda esta logadx."; 
 	
-	LOGOUT_SEM_USUARIO("Nao eh possivel realizar logout. Nenhum usuarix esta logadx no +pop."),
-	
-	FECHA_SISTEMA_COM_USUARIO("Nao foi possivel fechar o sistema. Um usuarix ainda esta logadx."),
-	
-	CADASTRO_NOME_VAZIO("Erro no cadastro de Usuarios. Nome dx usuarix nao pode ser vazio."),
-	CADASTRO_FORMATO_EMAIL_ERRADO("Erro no cadastro de Usuarios. Formato de e-mail esta invalido."),
-	CADASTRO_FORMATO_DATA_INVALIDA("Erro no cadastro de Usuarios. Formato de data esta invalida."),
-	CADASTRO_FORMATO_DATA_INEXISTENTE("Erro no cadastro de Usuarios. Data nao existe."),
-	
-	GET_DADOS_SENHA_PROTEGIDA("A senha dx usuarix eh protegida."),
-	GET_DADOS_EMAIL_NOT_FOUND("Um usuarix com email %s nao esta cadastradx.");
-	
-	private final String mensagem;
-	
-	MensagensDeErro(String mensagem) {
-		this.mensagem = mensagem;
-	}
-
-	public String getMesagem(){
-		return mensagem;
-	}
-
+	public static final String CAUSA_NOME_VAZIO = "Nome dx usuarix nao pode ser vazio.";
+	public static final String CAUSA_EMAIL_ERRADO = "Formato de e-mail esta invalido.";
+	public static final String CAUSA_FORMATO_DATA_INVALIDA = "Formato de data esta invalida.";
+	public static final String CAUSA_FORMATO_DATA_INEXISTENTE = "Data nao existe.";
 }

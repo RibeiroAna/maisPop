@@ -1,17 +1,20 @@
 package exceptions.naoTrataveis;
 
-import utils.MensagensDeErro;
-
 public class BadRequestException extends MaisPopExceptionNaoTratavel {
 	
 	private static final long serialVersionUID = 1473684668098955315L;
 
 	public BadRequestException() {
-		super();
+		super("");
 	}
 
-	public BadRequestException(MensagensDeErro error) {
-		super(error.getMesagem());
+	public BadRequestException(String error) {
+		super(error);
+	}
+
+	
+	public BadRequestException(String error, String causa) {
+		super(error, causa);
 	}
 
 }

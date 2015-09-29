@@ -1,12 +1,15 @@
 package core;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
 import core.Post;
 
-public class Mural {
+public class Mural implements Serializable{
 
+	
+	private static final long serialVersionUID = 6632999261405977535L;
 	private List<Post> postagens;
 
 	public Mural() {

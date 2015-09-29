@@ -1,16 +1,13 @@
 package exceptions.trataveis;
 
-import utils.MensagensDeErro;
-
-
 public class UnauthorizedException extends MaisPopExceptionTratavel {
-	
-	public UnauthorizedException(MensagensDeErro loginSenhaErrada) {
-		super(loginSenhaErrada.getMesagem());
+
+	public UnauthorizedException(String error, String causa) {
+		super(error, causa);
 	}
 	
-	public UnauthorizedException(String loginSenhaErrada) {
-		super(loginSenhaErrada);
+	public UnauthorizedException(String mensagemUnica) {
+		super(mensagemUnica);
 	}
 
 	public String getMessage() {
