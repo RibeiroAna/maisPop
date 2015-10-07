@@ -1,15 +1,13 @@
 package management;
 
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import utils.MensagensDeErro;
-import core.usuario.AtributoUsuario;
-import core.usuario.Usuario;
 import exceptions.naoTrataveis.BadRequestException;
-import exceptions.trataveis.UnauthorizedException;
+import utils.MensagensDeErro;
 
 /**
  * @author ana
@@ -18,7 +16,6 @@ import exceptions.trataveis.UnauthorizedException;
 public class Facade {
 
 	private Controller controller;
-	private Usuario usuarioLogado;
 	
 	private static final String DEFAULT_PROFILE_IMAGE_PATH = "resources/default.jpg";
 	private static final String FILE_SYSTEM_PATH = "backupSistema/sistemaPop";
@@ -39,12 +36,12 @@ public class Facade {
 	}
 
 	public void fechaSistema() throws BadRequestException {
-		if (usuarioLogado != null) {
+		if (controller.isUsuarioLogado()) {
 			throw new BadRequestException(MensagensDeErro.ERROR_FECHA_SISTEMA,
 					MensagensDeErro.CAUSA_USUARIO_AINDA_LOGADO);
 		}
 		try {
-			FileOutputStream arquivoGrav = new FileOutputStream(FILE_SYSTEM_PATH);
+			BufferedOutputStream arquivoGrav = new BufferedOutputStream(new FileOutputStream(FILE_SYSTEM_PATH));
 			ObjectOutputStream objGravar = new ObjectOutputStream(arquivoGrav);	
 			
             objGravar.writeObject(controller);
@@ -59,20 +56,11 @@ public class Facade {
 	}
 
 	public void login(String email, String senha) throws Exception {
-		if (usuarioLogado != null) {
-			String mensagem = String.format(MensagensDeErro.CAUSA_USUARIO_LOGADO, 
-					usuarioLogado.getAtributo(AtributoUsuario.NOME));
-			throw new UnauthorizedException(MensagensDeErro.ERROR_LOGIN, mensagem);
-		}
-		usuarioLogado = controller.login(email, senha);
+		controller.login(email, senha);
 	}
 
 	public void logout() throws Exception {
-		if (usuarioLogado == null) {
-			throw new BadRequestException(MensagensDeErro.ERROR_LOGOUT, 
-					MensagensDeErro.CAUSA_USUARIO_DESLOGADO);
-		}
-		usuarioLogado = null;
+		controller.logout();
 	}
 
 	/**
@@ -96,7 +84,7 @@ public class Facade {
 	}
 
 	public String getInfoUsuario(String atributo) throws Exception {
-		return getInfoUsuario(atributo, usuarioLogado.getEmail());
+		return controller.getInfoUsuario(atributo);
 	}
 
 	public String getInfoUsuario(String atributo, String idUsuario)
@@ -109,10 +97,10 @@ public class Facade {
 	}
 
 	public void atualizaPerfil(String atributo, String valor) throws Exception {
-		if (usuarioLogado == null) {
+		if (controller.isUsuarioLogado()) {
 			//throw new BadRequestException(error);
 		}
-		controller.atualizaPerfil(atributo, valor, usuarioLogado);
+		//controller.atualizaPerfil(atributo, valor, usuarioLogado);
 	}
 
 	public void atualizaPerfil(String atributo, String valor, String velhaSenha)

@@ -7,6 +7,7 @@ import java.util.List;
 import utils.MensagensDeErro;
 import core.usuario.AtributoUsuario;
 import core.usuario.Usuario;
+import exceptions.naoTrataveis.BadRequestException;
 import exceptions.naoTrataveis.NotFoundException;
 import exceptions.trataveis.UnauthorizedException;
 
@@ -14,6 +15,7 @@ public class Controller implements Serializable {
 
 	private static final long serialVersionUID = 3227105040361512397L;
 	List<Usuario> usuarios;
+	private Usuario usuarioLogado;
 
 	public Controller() {
 		usuarios = new ArrayList<Usuario>();
@@ -33,7 +35,7 @@ public class Controller implements Serializable {
 	}
 
 
-	private Usuario getUsuarioByEmail(String email) {
+	private Usuario getUsuarioByEmail(String email) throws Exception {
 		for (Usuario usuario : usuarios) {
 			if (usuario.getEmail().equals(email)) {
 				return usuario;
@@ -44,18 +46,33 @@ public class Controller implements Serializable {
 		throw new NotFoundException(mensagem);
 	}
 
-	public Usuario login(String email, String senha)
-			throws UnauthorizedException {
+	public void login(String email, String senha)
+			throws Exception {
 		Usuario usuario;
 		try {
 			usuario = getUsuarioByEmail(email);
 		} catch (NotFoundException e) {
 			String mensagem = String.format(
 					MensagensDeErro.CAUSA_USUARIO_NAO_CADASTRADO, email);
+			
 			throw new NotFoundException(MensagensDeErro.ERROR_LOGIN, mensagem);
 		}
 		usuario.login(email, senha);
-		return usuario;
+		
+		if (usuarioLogado != null) {
+			String mensagem = String.format(MensagensDeErro.CAUSA_USUARIO_LOGADO, 
+					usuarioLogado.getAtributo(AtributoUsuario.NOME));
+			throw new UnauthorizedException(MensagensDeErro.ERROR_LOGIN, mensagem);
+		}
+		usuarioLogado = usuario;
+	}
+	
+	public void logout() throws Exception {
+		if (usuarioLogado == null) {
+			throw new BadRequestException(MensagensDeErro.ERROR_LOGOUT, 
+					MensagensDeErro.CAUSA_USUARIO_DESLOGADO);
+		}
+		usuarioLogado = null;
 	}
 
 	public void cadastrarUsuario(String nome, String email, String senha,
@@ -84,9 +101,20 @@ public class Controller implements Serializable {
 		Usuario usuario = getUsuarioByEmail(email);
 		return usuario.getAtributo(strToAtributo(atributo));
 	}
+	
+	public String getInfoUsuario(String atributo) throws Exception {
+		return getInfoUsuario(atributo, usuarioLogado.getEmail());
+	}
 
-	public void removeUsuario(String email) {
+	public void removeUsuario(String email) throws Exception {
 		Usuario usuario = getUsuarioByEmail(email);
 		usuarios.remove(usuario);
+	}
+	
+	public boolean isUsuarioLogado() {
+		if(usuarioLogado.equals(null)) {
+			return false;
+		}
+		return true;
 	}
 }

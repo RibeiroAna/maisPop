@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import exceptions.naoTrataveis.BadFormatException;
 
 public class ValidaDados {
-
+	//TODO: singletom pesquisar patern
 	/**
 	 * Verifica se um nome não é vazio, se for lança uma exceção
 	 * 
