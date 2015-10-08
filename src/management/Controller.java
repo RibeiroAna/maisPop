@@ -112,7 +112,7 @@ public class Controller implements Serializable {
 	}
 	
 	public boolean isUsuarioLogado() {
-		if(usuarioLogado.equals(null)) {
+		if(usuarioLogado == null) {
 			return false;
 		}
 		return true;
