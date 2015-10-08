@@ -43,8 +43,7 @@ public class Facade {
 		try {
 			BufferedOutputStream arquivoGrav = new BufferedOutputStream(new FileOutputStream(FILE_SYSTEM_PATH));
 			//FileOutputStream arquivoGrav = new FileOutputStream(FILE_SYSTEM_PATH);
-			ObjectOutputStream objGravar = new ObjectOutputStream(arquivoGrav);	
-			System.out.println("aqui");
+			ObjectOutputStream objGravar = new ObjectOutputStream(arquivoGrav);
             objGravar.writeObject(controller);
             objGravar.flush();
             objGravar.close();
