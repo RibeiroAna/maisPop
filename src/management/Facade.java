@@ -96,16 +96,8 @@ public class Facade {
 		controller.removeUsuario(email);
 	}
 
-	public void atualizaPerfil(String atributo, String valor) throws Exception {
-		if (controller.isUsuarioLogado()) {
-			//throw new BadRequestException(error);
-		}
-		//controller.atualizaPerfil(atributo, valor, usuarioLogado);
-	}
-
-	public void atualizaPerfil(String atributo, String valor, String velhaSenha)
-			throws Exception {
-		// sistemaPop.atualizaPerfil(atributo, valor, velhaSenha);
+	public void atualizaPerfil(String atributo, String valor) {
+		//TODO: delegar pro controller
 	}
 
 	public void criaPost(String mensagem, String data) throws Exception {

@@ -21,20 +21,6 @@ public class Controller implements Serializable {
 		usuarios = new ArrayList<Usuario>();
 	}
 
-	public void atualizaPerfil(String atributo, String valor, Usuario usuario) {
-		usuarios.remove(usuario);
-		usuario.setAtributo(strToAtributo(atributo), valor);
-		usuarios.add(usuario);
-	}
-	
-	public void atualizaPerfil(String atributo, String senhaAntiga, 
-			String novaSenha, Usuario usuario) {
-		usuarios.remove(usuario);
-		usuario.atualizarSenha(novaSenha, senhaAntiga);
-		usuarios.add(usuario);
-	}
-
-
 	private Usuario getUsuarioByEmail(String email) throws Exception {
 		for (Usuario usuario : usuarios) {
 			if (usuario.getEmail().equals(email)) {
