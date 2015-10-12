@@ -13,7 +13,7 @@ public class ValidaDados {
 	 * @param nome
 	 *            do usuario
 	 */
-	public static void validaNome(String nome, String error) {
+	public static void validaNome(String nome, String error) throws BadFormatException{
 		if (nome.trim().length() == 0) {
 			throw new BadFormatException(error, MensagensDeErro.CAUSA_NOME_VAZIO);
 		}

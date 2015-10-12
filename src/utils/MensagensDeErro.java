@@ -5,7 +5,8 @@ public class MensagensDeErro {
 	public static final String ERROR_LOGOUT = "Nao eh possivel realizar logout. ";
 	public static final String ERROR_FECHA_SISTEMA = "Nao foi possivel fechar o sistema. ";
 	public static final String ERROR_CADASTRO = "Erro no cadastro de Usuarios. "; 
-	public static final String ERROR_ATUALIZA = "erro na atualizacao de perfil.";
+	public static final String ERROR_ATUALIZA = "Erro na atualizacao de perfil. ";
+	public static final String ERROR_ATUALIZA_DESLOGADO = "Nao eh possivel atualizar um perfil. ";
 	
 	public static final String CAUSA_USUARIO_NAO_CADASTRADO = "Um usuarix com email %s nao esta cadastradx.";
 	public static final String CAUSA_USUARIO_SENHA_ERRADA = "Senha invalida.";

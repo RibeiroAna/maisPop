@@ -7,6 +7,7 @@ import java.util.List;
 import utils.MensagensDeErro;
 import core.usuario.AtributoUsuario;
 import core.usuario.Usuario;
+import exceptions.naoTrataveis.BadFormatException;
 import exceptions.naoTrataveis.BadRequestException;
 import exceptions.naoTrataveis.NotFoundException;
 import exceptions.trataveis.UnauthorizedException;
@@ -19,6 +20,17 @@ public class Controller implements Serializable {
 
 	public Controller() {
 		usuarios = new ArrayList<Usuario>();
+	}
+	
+	public void atualizaPerfil(String atributo, String valor) throws Exception { // tá seboso??
+		if (usuarioLogado == null) {
+			throw new BadRequestException(MensagensDeErro.ERROR_ATUALIZA_DESLOGADO, MensagensDeErro.CAUSA_USUARIO_DESLOGADO);
+		}
+		usuarioLogado.setAtributo(atributo, valor);
+	}
+	
+	public void atualizaPerfil(String atributo, String valor, String velhaSenha) throws Exception {
+		usuarioLogado.setAtributo(atributo, valor, velhaSenha);
 	}
 
 	private Usuario getUsuarioByEmail(String email) throws Exception {

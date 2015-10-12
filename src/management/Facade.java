@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import exceptions.naoTrataveis.BadFormatException;
 import exceptions.naoTrataveis.BadRequestException;
 import utils.MensagensDeErro;
 
@@ -96,8 +97,12 @@ public class Facade {
 		controller.removeUsuario(email);
 	}
 
-	public void atualizaPerfil(String atributo, String valor) {
-		//TODO: delegar pro controller
+	public void atualizaPerfil(String atributo, String valor) throws Exception {
+			controller.atualizaPerfil(atributo, valor);
+	}
+	
+	public void atualizaPerfil(String atributo, String valor, String velhaSenha) throws Exception {
+		controller.atualizaPerfil(atributo, valor, velhaSenha);
 	}
 
 	public void criaPost(String mensagem, String data) throws Exception {

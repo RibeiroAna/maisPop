@@ -151,24 +151,35 @@ public class Usuario implements Serializable{
 		return null;
 	}
 	
-	public void setAtributo(AtributoUsuario atributo, String valor) {
+	public void setAtributo(String atributo, String valor) throws Exception {
 		switch (atributo) {
-		case NOME:
+		case "Nome":
 			ValidaDados.validaNome(nome, MensagensDeErro.ERROR_ATUALIZA);
 			nome = valor;
 			break;
-		case DATA_NASC:
+		case "Data de Nascimento":
 			ValidaDados.validaNome(dataNascimento, MensagensDeErro.ERROR_ATUALIZA);
 			dataNascimento = valor;
 			break;
-		case FOTO:
+		case "Foto":
 			imagemPerfilPath = valor;
 			break;
-		case EMAIL:
+		case "E-mail":
 			email = valor;
+			break;
+		case "Senha":
+			senha = valor;
 			break;
 		default:
 			break;
+		}
+	}
+	
+	public void setAtributo(String atributo, String valor, String velhaSenha) throws Exception {
+		if (velhaSenha.equals(this.senha)) {
+			this.setAtributo(atributo, valor);
+		} else {
+			throw new UnauthorizedException(MensagensDeErro.ERROR_ATUALIZA, MensagensDeErro.CAUSA_SENHA_INCORRETA);
 		}
 	}
 
