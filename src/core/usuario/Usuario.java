@@ -154,17 +154,18 @@ public class Usuario implements Serializable{
 	public void setAtributo(String atributo, String valor) throws Exception {
 		switch (atributo) {
 		case "Nome":
-			ValidaDados.validaNome(nome, MensagensDeErro.ERROR_ATUALIZA);
+			ValidaDados.validaNome(valor, MensagensDeErro.ERROR_ATUALIZA);
 			nome = valor;
 			break;
 		case "Data de Nascimento":
-			ValidaDados.validaNome(dataNascimento, MensagensDeErro.ERROR_ATUALIZA);
+			ValidaDados.validaData(valor, MensagensDeErro.ERROR_ATUALIZA);
 			dataNascimento = valor;
 			break;
 		case "Foto":
 			imagemPerfilPath = valor;
 			break;
 		case "E-mail":
+			ValidaDados.validaEmail(valor, MensagensDeErro.ERROR_ATUALIZA);
 			email = valor;
 			break;
 		case "Senha":
