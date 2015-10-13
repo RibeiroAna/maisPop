@@ -1,5 +1,7 @@
 package utils;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,6 +27,10 @@ public class ValidaDados {
 	 * @param data
 	 */
 	public static void validaData(String data, String error) {
+		
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+//		LocalDate dataFormatada = LocalDate.parse(data, formatter);
+//		return dataFormatada;
 		if (data.split("/").length != 3) {
 			throw new BadFormatException(error, MensagensDeErro.CAUSA_FORMATO_DATA_INVALIDA);
 		}

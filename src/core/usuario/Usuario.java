@@ -1,7 +1,7 @@
 package core.usuario;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import utils.MensagensDeErro;
@@ -39,8 +39,8 @@ public class Usuario implements Serializable{
 		this.senha = senha;
 		this.dataNascimento = dataNascimento;
 		mural = new Mural();
-		pedidosDeAmizadePedente = new LinkedList<Usuario>();
-		amigos = new LinkedList<Usuario>();
+		pedidosDeAmizadePedente = new ArrayList<Usuario>();
+		amigos = new ArrayList<Usuario>();
 	}
 
 	/**
