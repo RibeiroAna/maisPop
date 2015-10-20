@@ -101,8 +101,8 @@ public class Controller implements Serializable {
 	}
 	
 	public String getInfoUsuario(String atributo) throws Exception {
-//		return getInfoUsuario(atributo, usuarioLogado.getEmail());
-		return usuarioLogado.getAtributo(strToAtributo(atributo));
+		return getInfoUsuario(atributo, usuarioLogado.getEmail());
+//		return usuarioLogado.getAtributo(strToAtributo(atributo));
 	}
 
 	public void removeUsuario(String email) throws Exception {

@@ -44,7 +44,10 @@ public class ValidaDados {
 		 * TODO Se e somente se houver tempo fazer isso por mês, por exemplo
 		 * considerara inválida a data 30/02/2015
 		 */
-		if (((dia < 0) || (dia > 31) || (mes < 0) || (mes > 12) || (ano < 0) || (ano > 3000))) {
+		if (((dia < 1) || (dia > 31) || (mes < 1) || (mes > 12) || (ano < 0))) {
+			throw new BadFormatException(error, MensagensDeErro.CAUSA_FORMATO_DATA_INEXISTENTE);
+		}
+		if (mes == 2 && (dia > 28)) {
 			throw new BadFormatException(error, MensagensDeErro.CAUSA_FORMATO_DATA_INEXISTENTE);
 		}
 	}
