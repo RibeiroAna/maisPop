@@ -7,7 +7,6 @@ import java.util.List;
 import utils.MensagensDeErro;
 import core.usuario.AtributoUsuario;
 import core.usuario.Usuario;
-import exceptions.naoTrataveis.BadFormatException;
 import exceptions.naoTrataveis.BadRequestException;
 import exceptions.naoTrataveis.NotFoundException;
 import exceptions.trataveis.UnauthorizedException;
@@ -115,5 +114,11 @@ public class Controller implements Serializable {
 			return false;
 		}
 		return true;
+	}
+
+	public void criaPost(String post, List<String> hastags,
+			List<String> audios, List<String> imagens, String data) {
+		// TODO Auto-generated method stub
+		
 	}
 }

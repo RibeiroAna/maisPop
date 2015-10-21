@@ -1,14 +1,15 @@
 package management;
 
+import java.awt.List;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import exceptions.naoTrataveis.BadFormatException;
-import exceptions.naoTrataveis.BadRequestException;
 import utils.MensagensDeErro;
+import utils.TrataPost;
+import exceptions.naoTrataveis.BadRequestException;
 
 /**
  * @author ana
@@ -106,7 +107,11 @@ public class Facade {
 	}
 
 	public void criaPost(String mensagem, String data) throws Exception {
-		// sistemaPop.qcriaPost(mensagem, data);
+		String post = TrataPost.getMensagem(mensagem);
+		java.util.List<String> hastags = TrataPost.getHastags(mensagem);
+		java.util.List<String> audios = TrataPost.getAudios(mensagem);
+		java.util.List<String> imagens = TrataPost.getImagens(mensagem);
+		controller.criaPost(post, hastags, audios, imagens, data);
 	}
 
 	public String getPost(int post) {
