@@ -22,9 +22,9 @@ public class TrataPost {
 				break;
 			} else {
 				mensagem.append(palavra);
+				mensagem.append(" ");
 			}
 		}
-
 		if (mensagem.length() > 200) {
 			throw new BadRequestException(MensagensDeErro.ERROR_CRIAR_POST,
 					MensagensDeErro.CAUSA_POST_GRANDE);
@@ -64,6 +64,20 @@ public class TrataPost {
 			}
 		}
 		return audios;
+	}
+	
+	public static String formataData(String data) {
+		String [] dataHora = data.split(" ");
+		String [] diaMesAno = dataHora[0].split("/");
+		StringBuilder dataFormatada = new StringBuilder();
+		dataFormatada.append(diaMesAno[2]);
+		dataFormatada.append("-");
+		dataFormatada.append(diaMesAno[1]);
+		dataFormatada.append("-");
+		dataFormatada.append(diaMesAno[0]);
+		dataFormatada.append(" ");
+		dataFormatada.append(dataHora[1]);
+		return dataFormatada.toString();
 	}
 
 	public static List<String> getImagens(String post) {

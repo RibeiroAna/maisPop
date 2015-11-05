@@ -7,11 +7,10 @@ import java.util.List;
 import utils.MensagensDeErro;
 import utils.ValidaDados;
 import core.Mural;
-import core.Post;
 import exceptions.naoTrataveis.BadRequestException;
 import exceptions.trataveis.UnauthorizedException;
 
-public class Usuario implements Serializable{
+public class Usuario implements Serializable {
 
 	private static final long serialVersionUID = -5997328240008153153L;
 	private String nome;
@@ -30,9 +29,9 @@ public class Usuario implements Serializable{
 
 	public Usuario(String nome, String email, String senha,
 			String dataNascimento, String imagemPath) {
-		
+
 		validaDados(nome, email, dataNascimento);
-		
+
 		this.imagemPerfilPath = imagemPath;
 		this.nome = nome;
 		this.email = email;
@@ -45,6 +44,7 @@ public class Usuario implements Serializable{
 
 	/**
 	 * Verifica se os dados do usuario estão no formato correto
+	 * 
 	 * @param nome
 	 * @param email
 	 * @param dataNasc
@@ -60,7 +60,7 @@ public class Usuario implements Serializable{
 
 	public void login(String email, String senha) throws UnauthorizedException {
 		if (!senha.equals(this.senha)) {
-			throw new UnauthorizedException(MensagensDeErro.ERROR_LOGIN, 
+			throw new UnauthorizedException(MensagensDeErro.ERROR_LOGIN,
 					MensagensDeErro.CAUSA_USUARIO_SENHA_ERRADA);
 		}
 	}
@@ -69,7 +69,7 @@ public class Usuario implements Serializable{
 		if ((senhaAntiga == senha) && (novaSenha != null)) {
 			senha = novaSenha;
 		} else {
-			throw new BadRequestException(MensagensDeErro.ERROR_ATUALIZA, 
+			throw new BadRequestException(MensagensDeErro.ERROR_ATUALIZA,
 					MensagensDeErro.CAUSA_SENHA_INCORRETA);
 		}
 	}
@@ -108,25 +108,20 @@ public class Usuario implements Serializable{
 		}
 	}
 
-	public void postar(Post post) {
-		mural.adicionarPostagem(post);
+	public void postar(String post, List<String> hastags, List<String> audios,
+			List<String> imagens, String data, String mensagem) {
+		mural.adicionarPostagem(post, hastags, audios, imagens, data, mensagem);
 	}
 
-	public void deletarPostagem(Post post) {
-		mural.deletarPostagem(post);
-	}
-
-	public int getPopularidade() {
-		return mural.calculaPopularidade();
-	}
-
-	public void curtirPost(Post post) {
-		post.curtir();
-	}
-
-	public void reijeitarPost(Post post) {
-		post.rejeitar();
-	}
+	/*
+	 * public void deletarPostagem() { mural.deletarPostagem(post); }
+	 * 
+	 * public int getPopularidade() { return mural.calculaPopularidade(); }
+	 * 
+	 * public void curtirPost(Post post) { post.curtir(); }
+	 * 
+	 * public void reijeitarPost(Post post) { post.rejeitar(); }
+	 */
 
 	private String getDataFormatada() {
 		String dia = dataNascimento.split("/")[0];
@@ -142,7 +137,8 @@ public class Usuario implements Serializable{
 		case DATA_NASC:
 			return getDataFormatada();
 		case SENHA:
-			throw new UnauthorizedException(MensagensDeErro.CAUSA_USUARIO_SENHA_PROTEGIDA);
+			throw new UnauthorizedException(
+					MensagensDeErro.CAUSA_USUARIO_SENHA_PROTEGIDA);
 		case FOTO:
 			return imagemPerfilPath;
 		default:
@@ -150,7 +146,7 @@ public class Usuario implements Serializable{
 		}
 		return null;
 	}
-	
+
 	public void setAtributo(String atributo, String valor) throws Exception {
 		switch (atributo) {
 		case "Nome":
@@ -175,12 +171,14 @@ public class Usuario implements Serializable{
 			break;
 		}
 	}
-	
-	public void setAtributo(String atributo, String valor, String velhaSenha) throws Exception {
+
+	public void setAtributo(String atributo, String valor, String velhaSenha)
+			throws Exception {
 		if (velhaSenha.equals(this.senha)) {
 			this.setAtributo(atributo, valor);
 		} else {
-			throw new UnauthorizedException(MensagensDeErro.ERROR_ATUALIZA, MensagensDeErro.CAUSA_SENHA_INCORRETA);
+			throw new UnauthorizedException(MensagensDeErro.ERROR_ATUALIZA,
+					MensagensDeErro.CAUSA_SENHA_INCORRETA);
 		}
 	}
 
@@ -211,6 +209,10 @@ public class Usuario implements Serializable{
 		} else if (!email.equals(other.email))
 			return false;
 		return true;
+	}
+	
+	public String getPostByID(int id) {
+		return mural.getPostByID(id);
 	}
 
 	@Override

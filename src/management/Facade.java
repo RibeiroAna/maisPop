@@ -17,17 +17,18 @@ import exceptions.naoTrataveis.BadRequestException;
 public class Facade {
 
 	private Controller controller;
-	
+
 	private static final String DEFAULT_PROFILE_IMAGE_PATH = "resources/default.jpg";
 	private static final String FILE_SYSTEM_PATH = "backupSistema/sistemaPop";
 
 	public void iniciaSistema() {
 		try {
-			FileInputStream arquivoLeitura = new FileInputStream(FILE_SYSTEM_PATH);
+			FileInputStream arquivoLeitura = new FileInputStream(
+					FILE_SYSTEM_PATH);
 			ObjectInputStream objLeitura = new ObjectInputStream(arquivoLeitura);
 			controller = (Controller) objLeitura.readObject();
 			objLeitura.close();
-            arquivoLeitura.close();
+			arquivoLeitura.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -42,14 +43,16 @@ public class Facade {
 					MensagensDeErro.CAUSA_USUARIO_AINDA_LOGADO);
 		}
 		try {
-			BufferedOutputStream arquivoGrav = new BufferedOutputStream(new FileOutputStream(FILE_SYSTEM_PATH));
-			//FileOutputStream arquivoGrav = new FileOutputStream(FILE_SYSTEM_PATH);
+			BufferedOutputStream arquivoGrav = new BufferedOutputStream(
+					new FileOutputStream(FILE_SYSTEM_PATH));
+			// FileOutputStream arquivoGrav = new
+			// FileOutputStream(FILE_SYSTEM_PATH);
 			ObjectOutputStream objGravar = new ObjectOutputStream(arquivoGrav);
-            objGravar.writeObject(controller);
-            objGravar.flush();
-            objGravar.close();
-            arquivoGrav.flush();
-            arquivoGrav.close();
+			objGravar.writeObject(controller);
+			objGravar.flush();
+			objGravar.close();
+			arquivoGrav.flush();
+			arquivoGrav.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -81,7 +84,8 @@ public class Facade {
 
 	public String cadastraUsuario(String nome, String email, String senha,
 			String dataNasc) throws Exception {
-		return cadastraUsuario(nome, email, senha, dataNasc, DEFAULT_PROFILE_IMAGE_PATH);
+		return cadastraUsuario(nome, email, senha, dataNasc,
+				DEFAULT_PROFILE_IMAGE_PATH);
 	}
 
 	public String getInfoUsuario(String atributo) throws Exception {
@@ -98,24 +102,26 @@ public class Facade {
 	}
 
 	public void atualizaPerfil(String atributo, String valor) throws Exception {
-			controller.atualizaPerfil(atributo, valor);
+		controller.atualizaPerfil(atributo, valor);
 	}
-	
-	public void atualizaPerfil(String atributo, String valor, String velhaSenha) throws Exception {
+
+	public void atualizaPerfil(String atributo, String valor, String velhaSenha)
+			throws Exception {
 		controller.atualizaPerfil(atributo, valor, velhaSenha);
 	}
 
 	public void criaPost(String mensagem, String data) throws Exception {
-		//String post = TrataPost.getMensagem(mensagem);
-		//java.util.List<String> hastags = TrataPost.getHastags(mensagem);
-	    java.util.List<String> audios = TrataPost.getAudios(mensagem);
-	    //java.util.List<String> imagens = TrataPost.getImagens(mensagem);
-		//controller.criaPost(post, hastags, audios, imagens, data);
+		String post = TrataPost.getMensagem(mensagem);
+		java.util.List<String> hastags = TrataPost.getHastags(mensagem);
+		java.util.List<String> audios = TrataPost.getAudios(mensagem);
+		java.util.List<String> imagens = TrataPost.getImagens(mensagem);
+		String dataFormatada = TrataPost.formataData(data);
+		String mensagemFormatada = mensagem + " (" + dataFormatada + ")";
+		controller.criaPost(post, hastags, audios, imagens, dataFormatada, mensagemFormatada);
 	}
 
 	public String getPost(int post) {
-		// return sistemaPop.getPost(post);
-		return null;
+		return controller.getPostByID(post);
 	}
 
 	public String getPost(String atributo, int post) {

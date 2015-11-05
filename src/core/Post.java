@@ -1,29 +1,31 @@
 package core;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 public class Post implements Serializable{
 	
 	private static final long serialVersionUID = 6760403185218932353L;
 	private String texto;
-	private String imagemPath;
-	private String audioPath;
+	private  List<String> imagemPath;
+	private  List<String> audioPath;
+	private String mensagem;
+	private String dataDeCriacao;
+	
 	private List<String> hastags;
 	private int votosPositivos;
 	private int votosNegativos;
-	private Date dataDeCriacao;
 
-	public Post(String texto, String imagemPath, String audioPath,
-			List<String> hastags) {
+	public Post(String texto, List<String> audioPath, List<String> imagemPath,
+			List<String> hastags, String data, String mensagem) {
 		this.texto = texto;
 		this.imagemPath = imagemPath;
 		this.audioPath = audioPath;
+		this.dataDeCriacao = data;
+		this.mensagem = mensagem;
 		this.hastags = hastags;
 		this.votosNegativos = 0;
 		this.votosPositivos = 0;
-		dataDeCriacao = new Date();
 	}
 	
 	public void curtir() {
@@ -38,6 +40,11 @@ public class Post implements Serializable{
 		return votosPositivos - votosNegativos;
 	}
 
+	public String getMensagem() {
+		System.out.println(mensagem);
+		return mensagem;
+	}
+	
 	@Override
 	public String toString() {
 		return "Post [texto=" + texto + ", imagemPath=" + imagemPath

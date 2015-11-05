@@ -21,9 +21,10 @@ public class Controller implements Serializable {
 		usuarios = new ArrayList<Usuario>();
 	}
 	
-	public void atualizaPerfil(String atributo, String valor) throws Exception { // tá seboso??
+	public void atualizaPerfil(String atributo, String valor) throws Exception { 
 		if (usuarioLogado == null) {
-			throw new BadRequestException(MensagensDeErro.ERROR_ATUALIZA_DESLOGADO, MensagensDeErro.CAUSA_USUARIO_DESLOGADO);
+			throw new BadRequestException(MensagensDeErro.ERROR_ATUALIZA_DESLOGADO,
+					MensagensDeErro.CAUSA_USUARIO_DESLOGADO);
 		}
 		usuarioLogado.setAtributo(atributo, valor);
 	}
@@ -115,10 +116,14 @@ public class Controller implements Serializable {
 		}
 		return true;
 	}
+	
 
 	public void criaPost(String post, List<String> hastags,
-			List<String> audios, List<String> imagens, String data) {
-		// TODO Auto-generated method stub
-		
+			List<String> audios, List<String> imagens, String data, String mensagem) {
+		usuarioLogado.postar(post, hastags, audios, imagens, data, mensagem);
+	}
+	
+	public String getPostByID(int id) {
+		return usuarioLogado.getPostByID(id);
 	}
 }
