@@ -36,7 +36,7 @@ public class TrataPost {
 		String[] palavras = post.split(" ");
 		List<String> hastags = new LinkedList<String>();
 		boolean jahTeveHastag = false;
-		
+
 		for (String palavra : palavras) {
 			if (palavra.startsWith("#")) {
 				jahTeveHastag = true;
@@ -45,18 +45,19 @@ public class TrataPost {
 				if ((!palavra.startsWith("<")) && jahTeveHastag) {
 					String causa = String.format(
 							MensagensDeErro.CAUSA_POST_HASTAGS, palavra);
-					throw new BadRequestException(MensagensDeErro.ERROR_CRIAR_POST, causa);
+					throw new BadRequestException(
+							MensagensDeErro.ERROR_CRIAR_POST, causa);
 				}
 			}
 		}
 		return hastags;
 	}
-	
+
 	public static List<String> getAudios(String post) {
 		String[] palavras = post.split(" ");
 		List<String> audios = new LinkedList<String>();
-		
-		for (int i = 0; i <= palavras.length; i++) {
+
+		for (int i = 0; i < palavras.length; i++) {
 			if (palavras[i].contains("<audio>")) {
 				String audio = palavras[i].split(">")[1];
 				audios.add(audio.split("<")[0]);
@@ -64,17 +65,17 @@ public class TrataPost {
 		}
 		return audios;
 	}
-	
+
 	public static List<String> getImagens(String post) {
 		String[] palavras = post.split(" ");
 		List<String> imagens = new LinkedList<String>();
-		
-		for (int i = 0; i <= palavras.length; i++) {
+
+		for (int i = 0; i < palavras.length; i++) {
 			if (palavras[i].contains("<imagem>")) {
 				String imagem = palavras[i].split(">")[1];
 				imagens.add(imagem.split("<")[0]);
 			}
-		}	
+		}
 		return imagens;
 	}
 }

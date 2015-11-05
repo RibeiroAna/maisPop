@@ -1,6 +1,5 @@
 package management;
 
-import java.awt.List;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -107,11 +106,11 @@ public class Facade {
 	}
 
 	public void criaPost(String mensagem, String data) throws Exception {
-		String post = TrataPost.getMensagem(mensagem);
-		java.util.List<String> hastags = TrataPost.getHastags(mensagem);
-		java.util.List<String> audios = TrataPost.getAudios(mensagem);
-		java.util.List<String> imagens = TrataPost.getImagens(mensagem);
-		controller.criaPost(post, hastags, audios, imagens, data);
+		//String post = TrataPost.getMensagem(mensagem);
+		//java.util.List<String> hastags = TrataPost.getHastags(mensagem);
+	    java.util.List<String> audios = TrataPost.getAudios(mensagem);
+	    //java.util.List<String> imagens = TrataPost.getImagens(mensagem);
+		//controller.criaPost(post, hastags, audios, imagens, data);
 	}
 
 	public String getPost(int post) {
