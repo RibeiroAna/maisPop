@@ -6,7 +6,8 @@ import java.util.List;
 
 import utils.MensagensDeErro;
 import utils.ValidaDados;
-import core.Mural;
+import core.post.Mural;
+import exceptions.naoTrataveis.BadFormatException;
 import exceptions.naoTrataveis.BadRequestException;
 import exceptions.trataveis.UnauthorizedException;
 
@@ -147,7 +148,7 @@ public class Usuario implements Serializable {
 		return null;
 	}
 
-	public void setAtributo(String atributo, String valor) throws Exception {
+	public void setAtributo(String atributo, String valor) throws BadFormatException {
 		switch (atributo) {
 		case "Nome":
 			ValidaDados.validaNome(valor, MensagensDeErro.ERROR_ATUALIZA);
@@ -223,4 +224,10 @@ public class Usuario implements Serializable {
 				+ ", pedidosDeAmizadePedente=" + pedidosDeAmizadePedente
 				+ ", amigos=" + amigos + "]";
 	}
+
+	public String getPostAtributo(String atributo, int post) {
+		return mural.getPostAtributo(atributo, post);
+	}
+
+
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import utils.MensagensDeErro;
 import core.usuario.AtributoUsuario;
 import core.usuario.Usuario;
+import exceptions.naoTrataveis.BadFormatException;
 import exceptions.naoTrataveis.BadRequestException;
 import exceptions.naoTrataveis.NotFoundException;
 import exceptions.trataveis.UnauthorizedException;
@@ -20,16 +21,19 @@ public class Controller implements Serializable {
 	public Controller() {
 		usuarios = new ArrayList<Usuario>();
 	}
-	
-	public void atualizaPerfil(String atributo, String valor) throws Exception { 
+
+	public void atualizaPerfil(String atributo, String valor)
+			throws BadRequestException, BadFormatException {
 		if (usuarioLogado == null) {
-			throw new BadRequestException(MensagensDeErro.ERROR_ATUALIZA_DESLOGADO,
+			throw new BadRequestException(
+					MensagensDeErro.ERROR_ATUALIZA_DESLOGADO,
 					MensagensDeErro.CAUSA_USUARIO_DESLOGADO);
 		}
 		usuarioLogado.setAtributo(atributo, valor);
 	}
-	
-	public void atualizaPerfil(String atributo, String valor, String velhaSenha) throws Exception {
+
+	public void atualizaPerfil(String atributo, String valor, String velhaSenha)
+			throws Exception {
 		usuarioLogado.setAtributo(atributo, valor, velhaSenha);
 	}
 
@@ -44,30 +48,31 @@ public class Controller implements Serializable {
 		throw new NotFoundException(mensagem);
 	}
 
-	public void login(String email, String senha)
-			throws Exception {
+	public void login(String email, String senha) throws Exception {
 		Usuario usuario;
 		try {
 			usuario = getUsuarioByEmail(email);
 		} catch (NotFoundException e) {
 			String mensagem = String.format(
 					MensagensDeErro.CAUSA_USUARIO_NAO_CADASTRADO, email);
-			
+
 			throw new NotFoundException(MensagensDeErro.ERROR_LOGIN, mensagem);
 		}
 		usuario.login(email, senha);
-		
+
 		if (usuarioLogado != null) {
-			String mensagem = String.format(MensagensDeErro.CAUSA_USUARIO_LOGADO, 
+			String mensagem = String.format(
+					MensagensDeErro.CAUSA_USUARIO_LOGADO,
 					usuarioLogado.getAtributo(AtributoUsuario.NOME));
-			throw new UnauthorizedException(MensagensDeErro.ERROR_LOGIN, mensagem);
+			throw new UnauthorizedException(MensagensDeErro.ERROR_LOGIN,
+					mensagem);
 		}
 		usuarioLogado = usuario;
 	}
-	
+
 	public void logout() throws Exception {
 		if (usuarioLogado == null) {
-			throw new BadRequestException(MensagensDeErro.ERROR_LOGOUT, 
+			throw new BadRequestException(MensagensDeErro.ERROR_LOGOUT,
 					MensagensDeErro.CAUSA_USUARIO_DESLOGADO);
 		}
 		usuarioLogado = null;
@@ -84,7 +89,7 @@ public class Controller implements Serializable {
 	 *            é a string que o usuário digita como atributo
 	 * @return um atributo no formato de atributo de usuário
 	 */
-	private AtributoUsuario strToAtributo(String atributoStr) {
+	private AtributoUsuario strToAtributoUsuario(String atributoStr) {
 		AtributoUsuario[] atributos = AtributoUsuario.values();
 		for (AtributoUsuario atributoUsuario : atributos) {
 			if (atributoUsuario.getAtributo().equals(atributoStr)) {
@@ -93,37 +98,41 @@ public class Controller implements Serializable {
 		}
 		return null;
 	}
+	
 
 	public String getInfoUsuario(String atributo, String email)
 			throws Exception {
 		Usuario usuario = getUsuarioByEmail(email);
-		return usuario.getAtributo(strToAtributo(atributo));
+		return usuario.getAtributo(strToAtributoUsuario(atributo));
 	}
-	
+
 	public String getInfoUsuario(String atributo) throws Exception {
 		return getInfoUsuario(atributo, usuarioLogado.getEmail());
-//		return usuarioLogado.getAtributo(strToAtributo(atributo));
 	}
 
 	public void removeUsuario(String email) throws Exception {
 		Usuario usuario = getUsuarioByEmail(email);
 		usuarios.remove(usuario);
 	}
-	
+
 	public boolean isUsuarioLogado() {
-		if(usuarioLogado == null) {
+		if (usuarioLogado == null) {
 			return false;
 		}
 		return true;
 	}
-	
 
 	public void criaPost(String post, List<String> hastags,
-			List<String> audios, List<String> imagens, String data, String mensagem) {
+			List<String> audios, List<String> imagens, String data,
+			String mensagem) {
 		usuarioLogado.postar(post, hastags, audios, imagens, data, mensagem);
 	}
-	
+
 	public String getPostByID(int id) {
 		return usuarioLogado.getPostByID(id);
+	}
+
+	public String getPost(String atributo, int post) {
+		return usuarioLogado.getPostAtributo(atributo, post);
 	}
 }

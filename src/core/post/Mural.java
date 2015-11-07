@@ -1,4 +1,4 @@
-package core;
+package core.post;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class Mural implements Serializable{
 	
 	public void adicionarPostagem(String postStr, List<String> hastags,
 			List<String> audios, List<String> imagens, String data, String mensagem) {
-		Post post = new Post(postStr, hastags, audios, imagens, data, mensagem);
+		Post post = new Post(postStr, audios, imagens, hastags, data, mensagem);
 		postagens.add(post);
 	}
 
@@ -39,6 +39,21 @@ public class Mural implements Serializable{
 	@Override
 	public String toString() {
 		return "Mural [postagens=" + postagens + "]";
+	}
+	
+	private AtributoPost strToAtributoPost(String atributoStr) {
+		AtributoPost[] atributos = AtributoPost.values();
+		for (AtributoPost atributoUsuario : atributos) {
+			if (atributoUsuario.getAtributo().equals(atributoStr)) {
+				return atributoUsuario;
+			}
+		}
+		return null;
+	}
+	
+
+	public String getPostAtributo(String atributo, int id) {
+        return postagens.get(id).getAtributo(strToAtributoPost(atributo));
 	}
 
 }

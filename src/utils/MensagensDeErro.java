@@ -8,6 +8,7 @@ public class MensagensDeErro {
 	public static final String ERROR_ATUALIZA = "Erro na atualizacao de perfil. ";
 	public static final String ERROR_ATUALIZA_DESLOGADO = "Nao eh possivel atualizar um perfil. ";
 	public static final String ERROR_CRIAR_POST = "Nao eh possivel criar o post. ";
+	public static final String ERROR_GET_POST = "Requisicao invalida. O indice deve ser maior ou igual a zero.";
 	
 	public static final String CAUSA_USUARIO_NAO_CADASTRADO = "Um usuarix com email %s nao esta cadastradx.";
 	public static final String CAUSA_USUARIO_SENHA_ERRADA = "Senha invalida.";

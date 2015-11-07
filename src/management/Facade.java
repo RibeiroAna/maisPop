@@ -45,8 +45,6 @@ public class Facade {
 		try {
 			BufferedOutputStream arquivoGrav = new BufferedOutputStream(
 					new FileOutputStream(FILE_SYSTEM_PATH));
-			// FileOutputStream arquivoGrav = new
-			// FileOutputStream(FILE_SYSTEM_PATH);
 			ObjectOutputStream objGravar = new ObjectOutputStream(arquivoGrav);
 			objGravar.writeObject(controller);
 			objGravar.flush();
@@ -125,8 +123,7 @@ public class Facade {
 	}
 
 	public String getPost(String atributo, int post) {
-		// return sistemaPop.getPost(atributo, post);
-		return null;
+	    return controller.getPost(atributo, post);
 	}
 
 	public String getConteudoPost(int indice, int post) throws Exception {
