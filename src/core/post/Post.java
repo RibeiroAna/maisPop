@@ -19,8 +19,10 @@ public class Post implements Serializable {
 	private List<String> hastags;
 	private List<String> conteudoPost;
 
-	private int votosPositivos;
-	private int votosNegativos;
+	private int pontosPositivos;
+	private int pontosNegativos;
+	private int numPositivos;
+	private int numNegativos;
 
 	public Post(String texto, List<String> audioPath, List<String> imagemPath,
 			List<String> hastags, String data, String mensagem) {
@@ -30,9 +32,19 @@ public class Post implements Serializable {
 		this.dataDeCriacao = data;
 		this.mensagem = mensagem;
 		this.hastags = hastags;
-		this.votosNegativos = 0;
-		this.votosPositivos = 0;
+		this.pontosNegativos = 0;
+		this.pontosPositivos = 0;
+		this.numNegativos = 0;
+		this.numPositivos = 0;
 		mountConteudoPost();
+	}
+	
+	public int getNumPositivos() {
+		return numPositivos;
+	}
+	
+	public int getNumsNegativos() {
+		return numNegativos;
 	}
 
 	private void mountConteudoPost() {
@@ -47,16 +59,20 @@ public class Post implements Serializable {
 		this.conteudoPost.addAll(imagemPath);
 	}
 
-	public void curtir() {
-		votosPositivos++;
+	public void curtir(int pontosPop, List<String> hastags) {
+		pontosPositivos += pontosPop;
+		numPositivos++;
+		this.hastags.addAll(hastags);
 	}
 
-	public void rejeitar() {
-		votosNegativos++;
+	public void rejeitar(int pontosPop, List<String> hastags) {
+		pontosNegativos += pontosPop;
+		numNegativos++;
+		this.hastags.addAll(hastags);
 	}
 
 	public int getPopularidade() {
-		return votosPositivos - votosNegativos;
+		return pontosPositivos - pontosNegativos;
 	}
 
 	public String getMensagem() {
@@ -67,8 +83,8 @@ public class Post implements Serializable {
 	public String toString() {
 		return "Post [texto=" + texto + ", imagemPath=" + imagemPath
 				+ ", audioPath=" + audioPath + ", hastags=" + hastags
-				+ ", votosPositivos=" + votosPositivos + ", votosNegativos="
-				+ votosNegativos + ", dataDeCriacao=" + dataDeCriacao + "]";
+				+ ", votosPositivos=" + pontosPositivos + ", votosNegativos="
+				+ pontosNegativos + ", dataDeCriacao=" + dataDeCriacao + "]";
 	}
 
 	private String getHastagsStr() {

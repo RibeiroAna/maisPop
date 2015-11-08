@@ -8,4 +8,5 @@ public class MensagensDeNotificacao {
 	public static final String NOTIFICACAO_AMIZADE_REMOVIDA = "%s removeu a sua amizade.";
 	
 	public static final String NOTIFICACAO_CURTIR_POST = "%s curtiu seu post de %s.";
+	public static final String NOTIFICACAO_REJEITAR_POST = "%s rejeitou seu post de %s.";
 }

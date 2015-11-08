@@ -10,6 +10,7 @@ import utils.MensagensDeErro;
 import utils.TrataPost;
 import exceptions.naoTrataveis.BadRequestException;
 import exceptions.naoTrataveis.NotFoundException;
+import exceptions.trataveis.UnauthorizedException;
 
 /**
  * @author ana
@@ -17,7 +18,7 @@ import exceptions.naoTrataveis.NotFoundException;
  */
 public class Facade {
 
-	private Controller controller;
+	protected Controller controller;
 
 	private static final String DEFAULT_PROFILE_IMAGE_PATH = "resources/default.jpg";
 	private static final String FILE_SYSTEM_PATH = "backupSistema/sistemaPop";
@@ -31,7 +32,7 @@ public class Facade {
 			objLeitura.close();
 			arquivoLeitura.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			// ignorando possíveis exceções
 		}
 		if (controller == null) {
 			controller = new Controller();
@@ -76,13 +77,13 @@ public class Facade {
 	 * @throws Exception
 	 */
 	public String cadastraUsuario(String nome, String email, String senha,
-			String dataNasc, String imagem) throws Exception {
+			String dataNasc, String imagem) {
 		controller.cadastrarUsuario(nome, email, senha, dataNasc, imagem);
 		return email;
 	}
 
 	public String cadastraUsuario(String nome, String email, String senha,
-			String dataNasc) throws Exception {
+			String dataNasc) {
 		return cadastraUsuario(nome, email, senha, dataNasc,
 				DEFAULT_PROFILE_IMAGE_PATH);
 	}
@@ -116,7 +117,8 @@ public class Facade {
 		java.util.List<String> imagens = TrataPost.getImagens(mensagem);
 		String dataFormatada = TrataPost.formataData(data);
 		String mensagemFormatada = mensagem + " (" + dataFormatada + ")";
-		controller.criaPost(post, hastags, audios, imagens, dataFormatada, mensagemFormatada);
+		controller.criaPost(post, hastags, audios, imagens, dataFormatada,
+				mensagemFormatada);
 	}
 
 	public String getPost(int post) {
@@ -124,47 +126,73 @@ public class Facade {
 	}
 
 	public String getPost(String atributo, int post) {
-	    return controller.getPost(atributo, post);
+		return controller.getPost(atributo, post);
 	}
 
 	public String getConteudoPost(int indice, int post) throws Exception {
 		return controller.getConteudoPost(indice, post);
 	}
-	
+
 	public void adicionaAmigo(String emailUsuario) throws NotFoundException {
 		controller.adicionaAmigo(emailUsuario);
 	}
-	
+
 	public int getNotificacoes() {
 		return controller.getNotificacoes();
 	}
-	
+
 	public String getNextNotificacao() {
 		return controller.getNextNotificacao();
 	}
-	
+
 	public void rejeitaAmizade(String email) {
 		controller.rejeitaAmizade(email);
 	}
-	
+
 	public void aceitaAmizade(String email) {
 		controller.aceitaAmizade(email);
 	}
-	
+
 	public int getQtdAmigos() {
 		return controller.getQtdAmigos();
 	}
 
-	public void curtirPost(String email, int indexPost) throws Exception {
+	public void curtirPost(String email, int indexPost)
+			throws NotFoundException, UnauthorizedException {
 		controller.curtir(email, indexPost);
 	}
-	
+
+	public void rejeitarPost(String email, int indexPost)
+			throws NotFoundException, UnauthorizedException {
+		controller.rejeitarPost(email, indexPost);
+	}
+
 	public void removeAmigo(String email) {
 		controller.removeAmigo(email);
 	}
 
-	public void rejeitar(int indexPost, String email) {
-		// sistemaPop.rejeitar(indexPost, email);
+	public void adicionaPops(int pops) {
+		controller.adicionaPops(pops);
+	}
+
+	public String getPopularidade() {
+		return controller.getPopularidade();
+	}
+	
+	public int getPopsPost(int post) {
+		return controller.getPopPost(post);
+	}
+	
+	public int qtdCurtidasDePost(int post) {
+		return controller.qtdCurtidasDePost(post);
+	}
+	
+	public int qtdRejeicoesDePost(int post) {
+		return controller.qtdRejeicoesDePost(post);
+	}
+	
+	public int getPopsUsuario(String email) {
+		return controller.getPopsUsuario(email);
 	}
 
 }

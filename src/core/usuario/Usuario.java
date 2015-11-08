@@ -8,6 +8,10 @@ import utils.MensagensDeErro;
 import utils.MensagensDeNotificacao;
 import utils.ValidaDados;
 import core.post.Mural;
+import core.usuario.tipoPop.CelebridadePop;
+import core.usuario.tipoPop.IconePop;
+import core.usuario.tipoPop.Normal;
+import core.usuario.tipoPop.TipoPop;
 import exceptions.naoTrataveis.BadFormatException;
 import exceptions.naoTrataveis.BadRequestException;
 import exceptions.trataveis.UnauthorizedException;
@@ -22,7 +26,10 @@ public class Usuario implements Serializable {
 	private String dataNascimento;
 	private Mural mural;
 
+	private int pops;
 	private List<String> notificacoes;
+
+	private TipoPop tipoPop;
 
 	/**
 	 * Esta lista representa os pedidos de amizade que outros usuarios fazem ao
@@ -33,10 +40,10 @@ public class Usuario implements Serializable {
 
 	public Usuario(String nome, String email, String senha,
 			String dataNascimento, String imagemPath) {
-
 		validaDados(nome, email, dataNascimento);
-
+		this.pops = 0;
 		this.imagemPerfilPath = imagemPath;
+		this.tipoPop = new Normal();
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
@@ -61,6 +68,10 @@ public class Usuario implements Serializable {
 		ValidaDados.validaData(dataNasc, MensagensDeErro.ERROR_CADASTRO);
 		// Validando o email
 		ValidaDados.validaEmail(email, MensagensDeErro.ERROR_CADASTRO);
+	}
+
+	public TipoPop getTipoPop() {
+		return tipoPop;
 	}
 
 	public void login(String email, String senha) throws UnauthorizedException {
@@ -149,7 +160,8 @@ public class Usuario implements Serializable {
 		return ano + "-" + mes + "-" + dia;
 	}
 
-	public String getAtributo(AtributoUsuario atributo) throws Exception {
+	public String getAtributo(AtributoUsuario atributo)
+			throws UnauthorizedException {
 		switch (atributo) {
 		case NOME:
 			return nome;
@@ -269,8 +281,9 @@ public class Usuario implements Serializable {
 		return amigos.size();
 	}
 
-	public void curtir(int indexPost, String nome) {
-		String data = mural.curtir(indexPost);
+	public void curtir(int indexPost, String nome, int pontosPop,
+			List<String> hastags) {
+		String data = mural.curtir(indexPost, pontosPop, hastags);
 		String msg = String.format(
 				MensagensDeNotificacao.NOTIFICACAO_CURTIR_POST, nome, data);
 		notificacoes.add(msg);
@@ -286,6 +299,47 @@ public class Usuario implements Serializable {
 		} else {
 			throw new BadRequestException();
 		}
+	}
+	
+	public int getPop() {
+		this.pops += mural.calculaPopularidade();
+		return pops;
+	}
+
+	public void adicionaPops(int pops) {
+		this.pops += pops;
+		if (this.pops < 500) {
+			tipoPop = new Normal();
+		} else if ((this.pops >= 500) && (this.pops <= 1000)) {
+			tipoPop = new CelebridadePop();
+		} else if (this.pops > 1000) {
+			tipoPop = new IconePop();
+		}
+	}
+
+	public String getPopularidade() {
+		return tipoPop.getClassePopularidade();
+	}
+
+	public void rejeitar(int indexPost, String atributo, int pontosPop,
+			List<String> hastags) {
+		String data = mural.rejeitar(indexPost, pontosPop, hastags);
+		String msg = String.format(
+				MensagensDeNotificacao.NOTIFICACAO_REJEITAR_POST, nome, data);
+		notificacoes.add(msg);
+
+	}
+
+	public int getPopPost(int post) {
+		return mural.getPopPost(post);
+	}
+
+	public int qtdCurtidasDePost(int post) {
+		return mural.qtdCurtidasDePost(post);
+	}
+
+	public int qtdRejeicoesDePost(int post) {
+		return mural.qtdRejeicoesDePost(post);
 	}
 
 }

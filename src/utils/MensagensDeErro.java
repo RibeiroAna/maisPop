@@ -15,6 +15,8 @@ public class MensagensDeErro {
 	public static final String ERROR_GET_NOTIFICACAO = "Nao ha mais notificacoes.";
 	
 	public static final String ERROR_AMIZADE_NAO_PEDIDA = "%s nao lhe enviou solicitacoes de amizade.";
+	
+	public static final String ERROR_CONSULTA_POPS = "Erro na consulta de Pops. ";
 
 	public static final String CAUSA_USUARIO_NAO_CADASTRADO = "Um usuarix com email %s nao esta cadastradx.";
 	public static final String CAUSA_USUARIO_SENHA_ERRADA = "Senha invalida.";

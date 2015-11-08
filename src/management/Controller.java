@@ -21,6 +21,10 @@ public class Controller implements Serializable {
 	public Controller() {
 		usuarios = new ArrayList<Usuario>();
 	}
+	
+	public Usuario getUsuarioLogado() {
+		return usuarioLogado;
+	}
 
 	public void atualizaPerfil(String atributo, String valor)
 			throws BadRequestException, BadFormatException {
@@ -79,7 +83,7 @@ public class Controller implements Serializable {
 	}
 
 	public void cadastrarUsuario(String nome, String email, String senha,
-			String dataNasc, String imagem) throws Exception {
+			String dataNasc, String imagem) {
 		Usuario usuario = new Usuario(nome, email, senha, dataNasc, imagem);
 		usuarios.add(usuario);
 	}
@@ -165,13 +169,48 @@ public class Controller implements Serializable {
 		usuarioLogado.aceitarAmigo(novoAmigo);
 	}
 
-	public void curtir(String email, int indexPost) throws Exception {
+	public void curtir(String email, int indexPost) throws NotFoundException, UnauthorizedException {
 		Usuario usuario = getUsuarioByEmail(email);
-		usuario.curtir(indexPost, usuarioLogado.getAtributo(AtributoUsuario.NOME));
+		usuario.curtir(indexPost,usuarioLogado.getAtributo(AtributoUsuario.NOME),
+				usuarioLogado.getTipoPop().getPontosPop(), usuarioLogado.getTipoPop().getCurtirHastags());
 	}
 
 	public void removeAmigo(String email) {
 		Usuario usuario = getUsuarioByEmail(email);
 		usuarioLogado.removeAmigo(usuario);
+	}
+
+	public void adicionaPops(int pops) {
+		usuarioLogado.adicionaPops(pops);
+	}
+
+	public String getPopularidade() {
+		return usuarioLogado.getPopularidade();
+	}
+
+	public void rejeitarPost(String email, int indexPost) throws NotFoundException, UnauthorizedException {
+		Usuario usuario = getUsuarioByEmail(email);
+		usuario.rejeitar(indexPost,usuarioLogado.getAtributo(AtributoUsuario.NOME),
+				usuarioLogado.getTipoPop().getPontosPop(), usuarioLogado.getTipoPop().getRejeitarHastags());	
+	}
+
+	public int getPopPost(int post) {
+		return usuarioLogado.getPopPost(post);
+	}
+
+	public int qtdCurtidasDePost(int post) {
+		return usuarioLogado.qtdCurtidasDePost(post);
+	}
+
+	public int qtdRejeicoesDePost(int post) {
+		return usuarioLogado.qtdRejeicoesDePost(post);
+	}
+
+	public int getPopsUsuario(String email) throws BadRequestException {
+		if (isUsuarioLogado()) {
+			throw new BadRequestException(MensagensDeErro.ERROR_CONSULTA_POPS,
+					MensagensDeErro.CAUSA_USUARIO_AINDA_LOGADO);
+		}
+		return getUsuarioByEmail(email).getPop();
 	}
 }
