@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import utils.MensagensDeErro;
+import utils.MensagensDeNotificacao;
 import utils.ValidaDados;
 import core.post.Mural;
 import exceptions.naoTrataveis.BadFormatException;
@@ -20,6 +21,8 @@ public class Usuario implements Serializable {
 	private String imagemPerfilPath;
 	private String dataNascimento;
 	private Mural mural;
+
+	private List<String> notificacoes;
 
 	/**
 	 * Esta lista representa os pedidos de amizade que outros usuarios fazem ao
@@ -41,6 +44,7 @@ public class Usuario implements Serializable {
 		mural = new Mural();
 		pedidosDeAmizadePedente = new ArrayList<Usuario>();
 		amigos = new ArrayList<Usuario>();
+		notificacoes = new ArrayList<String>();
 	}
 
 	/**
@@ -80,23 +84,37 @@ public class Usuario implements Serializable {
 			novoAmigo.amigos.add(this);
 			this.amigos.add(novoAmigo);
 			this.pedidosDeAmizadePedente.remove(novoAmigo);
+
+			String msgNot = String.format(
+					MensagensDeNotificacao.NOTIFICACAO_AMIZADE_ACEITACAO,
+					this.nome);
+			novoAmigo.notificacoes.add(msgNot);
 		} else {
-			// TODO tratar melhor as exceções com hierarquias de exception, etc
-			throw new RuntimeException();
+			String msg = String.format(
+					MensagensDeErro.ERROR_AMIZADE_NAO_PEDIDA, novoAmigo.nome);
+			throw new BadRequestException(msg);
 		}
 	}
 
 	public void rejeitarAmigo(Usuario novoAmigo) {
 		if ((pedidosDeAmizadePedente.contains(novoAmigo))) {
 			this.pedidosDeAmizadePedente.remove(novoAmigo);
+			String msgNot = String.format(
+					MensagensDeNotificacao.NOTIFICACAO_AMIZADE_RECUSA,
+					this.nome);
+			novoAmigo.notificacoes.add(msgNot);
 		} else {
-			// TODO tratar melhor as exceções com hierarquias de exception, etc
-			throw new RuntimeException();
+			String msg = String.format(
+					MensagensDeErro.ERROR_AMIZADE_NAO_PEDIDA, novoAmigo.nome);
+			throw new BadRequestException(msg);
 		}
 	}
 
 	public void adicionarAmigo(Usuario novoAmigo) {
 		novoAmigo.pedidosDeAmizadePedente.add(this);
+		String msg = String.format(
+				MensagensDeNotificacao.NOTIFICACAO_AMIZADE_PEDIDO, this.nome);
+		novoAmigo.notificacoes.add(msg);
 	}
 
 	public void excluirAmigo(Usuario exAmigo) {
@@ -148,7 +166,8 @@ public class Usuario implements Serializable {
 		return null;
 	}
 
-	public void setAtributo(String atributo, String valor) throws BadFormatException {
+	public void setAtributo(String atributo, String valor)
+			throws BadFormatException {
 		switch (atributo) {
 		case "Nome":
 			ValidaDados.validaNome(valor, MensagensDeErro.ERROR_ATUALIZA);
@@ -187,6 +206,19 @@ public class Usuario implements Serializable {
 		return email;
 	}
 
+	public int getNotificacoes() {
+		return notificacoes.size();
+	}
+
+	public String getNextNotificacao() {
+		if (notificacoes.size() == 0) {
+			throw new BadRequestException(MensagensDeErro.ERROR_GET_NOTIFICACAO);
+		}
+		String mensagem = notificacoes.get(0);
+		notificacoes.remove(mensagem);
+		return mensagem;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -211,7 +243,7 @@ public class Usuario implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 	public String getPostByID(int id) {
 		return mural.getPostByID(id);
 	}
@@ -229,5 +261,31 @@ public class Usuario implements Serializable {
 		return mural.getPostAtributo(atributo, post);
 	}
 
+	public String getConteudoPost(int indice, int post) {
+		return mural.getConteudoPost(indice, post);
+	}
+
+	public int getQtdAmigos() {
+		return amigos.size();
+	}
+
+	public void curtir(int indexPost, String nome) {
+		String data = mural.curtir(indexPost);
+		String msg = String.format(
+				MensagensDeNotificacao.NOTIFICACAO_CURTIR_POST, nome, data);
+		notificacoes.add(msg);
+	}
+
+	public void removeAmigo(Usuario usuario) {
+		if (amigos.contains(usuario)) {
+			amigos.remove(usuario);
+			String msg = String.format(
+					MensagensDeNotificacao.NOTIFICACAO_AMIZADE_REMOVIDA, nome);
+			usuario.notificacoes.add(msg);
+			usuario.amigos.remove(this);
+		} else {
+			throw new BadRequestException();
+		}
+	}
 
 }

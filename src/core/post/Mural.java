@@ -56,4 +56,13 @@ public class Mural implements Serializable{
         return postagens.get(id).getAtributo(strToAtributoPost(atributo));
 	}
 
+	public String getConteudoPost(int indice, int post) {
+		return postagens.get(post).getConteudoPost(indice);
+	}
+
+	public String curtir(int indexPost) {
+		postagens.get(indexPost).curtir();
+		return postagens.get(indexPost).getAtributo(AtributoPost.DATA);
+	}
+
 }

@@ -37,7 +37,7 @@ public class Controller implements Serializable {
 		usuarioLogado.setAtributo(atributo, valor, velhaSenha);
 	}
 
-	private Usuario getUsuarioByEmail(String email) throws Exception {
+	private Usuario getUsuarioByEmail(String email) throws NotFoundException {
 		for (Usuario usuario : usuarios) {
 			if (usuario.getEmail().equals(email)) {
 				return usuario;
@@ -98,7 +98,6 @@ public class Controller implements Serializable {
 		}
 		return null;
 	}
-	
 
 	public String getInfoUsuario(String atributo, String email)
 			throws Exception {
@@ -134,5 +133,45 @@ public class Controller implements Serializable {
 
 	public String getPost(String atributo, int post) {
 		return usuarioLogado.getPostAtributo(atributo, post);
+	}
+
+	public String getConteudoPost(int indice, int post) {
+		return usuarioLogado.getConteudoPost(indice, post);
+	}
+
+	public void adicionaAmigo(String emailUsuario) throws NotFoundException {
+		usuarioLogado.adicionarAmigo(getUsuarioByEmail(emailUsuario));
+	}
+
+	public int getNotificacoes() {
+		return usuarioLogado.getNotificacoes();
+	}
+
+	public String getNextNotificacao() {
+		return usuarioLogado.getNextNotificacao();
+	}
+
+	public void rejeitaAmizade(String email) {
+		Usuario novoAmigo = getUsuarioByEmail(email);
+		usuarioLogado.rejeitarAmigo(novoAmigo);
+	}
+
+	public int getQtdAmigos() {
+		return usuarioLogado.getQtdAmigos();
+	}
+	
+	public void aceitaAmizade(String email) {
+		Usuario novoAmigo = getUsuarioByEmail(email);
+		usuarioLogado.aceitarAmigo(novoAmigo);
+	}
+
+	public void curtir(String email, int indexPost) throws Exception {
+		Usuario usuario = getUsuarioByEmail(email);
+		usuario.curtir(indexPost, usuarioLogado.getAtributo(AtributoUsuario.NOME));
+	}
+
+	public void removeAmigo(String email) {
+		Usuario usuario = getUsuarioByEmail(email);
+		usuarioLogado.removeAmigo(usuario);
 	}
 }

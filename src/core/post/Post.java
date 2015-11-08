@@ -1,8 +1,10 @@
 package core.post;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import utils.MensagensDeErro;
 import exceptions.naoTrataveis.BadRequestException;
 
 public class Post implements Serializable {
@@ -11,12 +13,12 @@ public class Post implements Serializable {
 	private String texto;
 	private String mensagem;
 	private String dataDeCriacao;
-	
+
 	private List<String> imagemPath;
 	private List<String> audioPath;
 	private List<String> hastags;
 	private List<String> conteudoPost;
-	
+
 	private int votosPositivos;
 	private int votosNegativos;
 
@@ -32,11 +34,17 @@ public class Post implements Serializable {
 		this.votosPositivos = 0;
 		mountConteudoPost();
 	}
-	
+
 	private void mountConteudoPost() {
-		conteudoPost.add(mensagem);
-		conteudoPost.addAll(imagemPath);
-		conteudoPost.addAll(audioPath);
+		this.conteudoPost = new ArrayList<String>();
+		conteudoPost.add(texto.substring(0, texto.length() - 1));
+		for (String audio : audioPath) {
+			conteudoPost.add("$arquivo_audio:" + audio);
+		}
+		for (String imagem : imagemPath) {
+			conteudoPost.add("$arquivo_imagem:" + imagem);
+		}
+		this.conteudoPost.addAll(imagemPath);
 	}
 
 	public void curtir() {
@@ -82,19 +90,22 @@ public class Post implements Serializable {
 		}
 		return msg;
 	}
-	
- /*	public String getConteudoPost(int conteudo) {
+
+	public String getConteudoPost(int conteudo) {
 		try {
 			return conteudoPost.get(conteudo);
-		} 
-		catch (ArrayIndexOutOfBoundsException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
 			if (conteudo < 0) {
-				throw new BadRequestException();
+				throw new BadRequestException(MensagensDeErro.ERROR_GET_POST);
 			}
+			String mensagem = String.format(
+					MensagensDeErro.ERROR_GET_POST_OUT_OF_BOUNDS, conteudo,
+					conteudoPost.size());
+			throw new BadRequestException(mensagem);
+
 		}
-		return null;
-	}*/
-	
+	}
+
 	public String getAtributo(AtributoPost atributoPost) {
 		switch (atributoPost) {
 		case MENSAGEM:

@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import utils.MensagensDeErro;
 import utils.TrataPost;
 import exceptions.naoTrataveis.BadRequestException;
+import exceptions.naoTrataveis.NotFoundException;
 
 /**
  * @author ana
@@ -127,11 +128,39 @@ public class Facade {
 	}
 
 	public String getConteudoPost(int indice, int post) throws Exception {
-		return null;
+		return controller.getConteudoPost(indice, post);
+	}
+	
+	public void adicionaAmigo(String emailUsuario) throws NotFoundException {
+		controller.adicionaAmigo(emailUsuario);
+	}
+	
+	public int getNotificacoes() {
+		return controller.getNotificacoes();
+	}
+	
+	public String getNextNotificacao() {
+		return controller.getNextNotificacao();
+	}
+	
+	public void rejeitaAmizade(String email) {
+		controller.rejeitaAmizade(email);
+	}
+	
+	public void aceitaAmizade(String email) {
+		controller.aceitaAmizade(email);
+	}
+	
+	public int getQtdAmigos() {
+		return controller.getQtdAmigos();
 	}
 
-	public void curtir(int indexPost, String email) {
-		// sistemaPop.curtir(indexPost, email);
+	public void curtirPost(String email, int indexPost) throws Exception {
+		controller.curtir(email, indexPost);
+	}
+	
+	public void removeAmigo(String email) {
+		controller.removeAmigo(email);
 	}
 
 	public void rejeitar(int indexPost, String email) {
