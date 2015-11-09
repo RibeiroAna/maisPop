@@ -16,6 +16,7 @@ public class Main {
 		 testes.add("easyAccept/teste_aceitacao/usecase_3.txt");
 		 testes.add("easyAccept/teste_aceitacao/usecase_4.txt");
 		 testes.add("easyAccept/teste_aceitacao/usecase_5.txt");
+		 testes.add("easyAccept/teste_aceitacao/usecase_6.txt");
 		 
 		 EasyAcceptFacade eaFacade = new EasyAcceptFacade(facade, testes);
 		 eaFacade.executeTests();

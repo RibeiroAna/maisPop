@@ -58,17 +58,32 @@ public class Post implements Serializable {
 		}
 		this.conteudoPost.addAll(imagemPath);
 	}
+	
+	private void updateTextoPost() {
+		StringBuilder novoTexto = new StringBuilder(mensagem);
+		novoTexto.append(imagemPath);
+		novoTexto.append(audioPath);
+		novoTexto.append(hastags);
+		System.out.println(novoTexto.toString());
+		texto = novoTexto.toString();
+	}
 
 	public void curtir(int pontosPop, List<String> hastags) {
 		pontosPositivos += pontosPop;
 		numPositivos++;
-		this.hastags.addAll(hastags);
+		if (!this.hastags.containsAll(hastags)) {
+			this.hastags.addAll(hastags);
+			updateTextoPost();
+		}
 	}
 
 	public void rejeitar(int pontosPop, List<String> hastags) {
 		pontosNegativos += pontosPop;
 		numNegativos++;
-		this.hastags.addAll(hastags);
+		if (!this.hastags.containsAll(hastags)) {
+			this.hastags.addAll(hastags);
+			updateTextoPost();
+		}
 	}
 
 	public int getPopularidade() {

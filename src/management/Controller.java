@@ -213,4 +213,8 @@ public class Controller implements Serializable {
 		}
 		return getUsuarioByEmail(email).getPop();
 	}
+
+	public int getPopsUsuario() {
+		return usuarioLogado.getPop();
+	}
 }

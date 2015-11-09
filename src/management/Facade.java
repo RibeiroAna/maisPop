@@ -194,5 +194,9 @@ public class Facade {
 	public int getPopsUsuario(String email) {
 		return controller.getPopsUsuario(email);
 	}
+	
+	public int getPopsUsuario() {
+		return controller.getPopsUsuario();
+	}
 
 }
