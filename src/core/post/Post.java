@@ -60,12 +60,30 @@ public class Post implements Serializable {
 	}
 	
 	private void updateTextoPost() {
-		StringBuilder novoTexto = new StringBuilder(mensagem);
-		novoTexto.append(imagemPath);
+		StringBuilder novoTexto = new StringBuilder(texto);
+		/*novoTexto.append(imagemPath);
 		novoTexto.append(audioPath);
-		novoTexto.append(hastags);
-		System.out.println(novoTexto.toString());
-		texto = novoTexto.toString();
+		novoTexto.append(hastags);*/
+		for (String imagem : imagemPath) {
+			novoTexto.append("<imagem>");
+			novoTexto.append(imagem);
+			novoTexto.append("</imagem>");
+			novoTexto.append(" ");
+		}
+		for (String audio : audioPath) {
+			novoTexto.append("<audio>");
+			novoTexto.append(audio);
+			novoTexto.append("</audio>");
+			novoTexto.append(" ");
+		}
+		for (String hastag : hastags) {
+			novoTexto.append(hastag);
+			novoTexto.append(" ");
+		}
+		novoTexto.append("(");
+		novoTexto.append(dataDeCriacao);
+		novoTexto.append(")");
+		mensagem = novoTexto.toString();
 	}
 
 	public void curtir(int pontosPop, List<String> hastags) {
@@ -73,8 +91,8 @@ public class Post implements Serializable {
 		numPositivos++;
 		if (!this.hastags.containsAll(hastags)) {
 			this.hastags.addAll(hastags);
-			updateTextoPost();
 		}
+		updateTextoPost();
 	}
 
 	public void rejeitar(int pontosPop, List<String> hastags) {
@@ -82,8 +100,8 @@ public class Post implements Serializable {
 		numNegativos++;
 		if (!this.hastags.containsAll(hastags)) {
 			this.hastags.addAll(hastags);
-			updateTextoPost();
 		}
+		updateTextoPost();
 	}
 
 	public int getPopularidade() {
