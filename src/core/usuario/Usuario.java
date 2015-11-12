@@ -27,6 +27,7 @@ public class Usuario implements Serializable {
 	private Mural mural;
 
 	private int pops;
+	private int settedPops;
 	private List<String> notificacoes;
 
 	private TipoPop tipoPop;
@@ -287,6 +288,8 @@ public class Usuario implements Serializable {
 		String msg = String.format(
 				MensagensDeNotificacao.NOTIFICACAO_CURTIR_POST, nome, data);
 		notificacoes.add(msg);
+		pops = mural.calculaPopularidade() + settedPops;
+		calculaPopularidade();
 	}
 
 	public void removeAmigo(Usuario usuario) {
@@ -302,12 +305,10 @@ public class Usuario implements Serializable {
 	}
 	
 	public int getPop() {
-		this.pops += mural.calculaPopularidade();
 		return pops;
 	}
-
-	public void adicionaPops(int pops) {
-		this.pops += pops;
+	
+	private void calculaPopularidade() {
 		if (this.pops < 500) {
 			tipoPop = new Normal();
 		} else if ((this.pops >= 500) && (this.pops <= 1000)) {
@@ -315,6 +316,12 @@ public class Usuario implements Serializable {
 		} else if (this.pops > 1000) {
 			tipoPop = new IconePop();
 		}
+	}
+
+	public void adicionaPops(int pops) {
+		settedPops += pops;
+		this.pops += settedPops;
+		calculaPopularidade();
 	}
 
 	public String getPopularidade() {
@@ -327,7 +334,8 @@ public class Usuario implements Serializable {
 		String msg = String.format(
 				MensagensDeNotificacao.NOTIFICACAO_REJEITAR_POST, nome, data);
 		notificacoes.add(msg);
-
+		pops = mural.calculaPopularidade() + settedPops;
+		calculaPopularidade();
 	}
 
 	public int getPopPost(int post) {

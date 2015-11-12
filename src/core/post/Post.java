@@ -38,18 +38,20 @@ public class Post implements Serializable {
 		this.numPositivos = 0;
 		mountConteudoPost();
 	}
-	
+
 	public int getNumPositivos() {
 		return numPositivos;
 	}
-	
+
 	public int getNumsNegativos() {
 		return numNegativos;
 	}
 
 	private void mountConteudoPost() {
 		this.conteudoPost = new ArrayList<String>();
-		conteudoPost.add(texto.substring(0, texto.length() - 1));
+		if (!texto.isEmpty()) {
+			conteudoPost.add(texto.substring(0, texto.length() - 1));
+		}
 		for (String audio : audioPath) {
 			conteudoPost.add("$arquivo_audio:" + audio);
 		}
@@ -58,12 +60,10 @@ public class Post implements Serializable {
 		}
 		this.conteudoPost.addAll(imagemPath);
 	}
-	
+
 	private void updateTextoPost() {
 		StringBuilder novoTexto = new StringBuilder(texto);
-		/*novoTexto.append(imagemPath);
-		novoTexto.append(audioPath);
-		novoTexto.append(hastags);*/
+
 		for (String imagem : imagemPath) {
 			novoTexto.append("<imagem>");
 			novoTexto.append(imagem);
