@@ -134,8 +134,7 @@ public class Usuario implements Serializable {
 			amigos.remove(exAmigo);
 			exAmigo.amigos.remove(amigos);
 		} else {
-			// TODO tratar melhor as exceções com hierarquias de exception, etc
-			throw new RuntimeException();
+			throw new BadRequestException();
 		}
 	}
 
@@ -143,16 +142,6 @@ public class Usuario implements Serializable {
 			List<String> imagens, String data, String mensagem) {
 		mural.adicionarPostagem(post, hastags, audios, imagens, data, mensagem);
 	}
-
-	/*
-	 * public void deletarPostagem() { mural.deletarPostagem(post); }
-	 * 
-	 * public int getPopularidade() { return mural.calculaPopularidade(); }
-	 * 
-	 * public void curtirPost(Post post) { post.curtir(); }
-	 * 
-	 * public void reijeitarPost(Post post) { post.rejeitar(); }
-	 */
 
 	private String getDataFormatada() {
 		String dia = dataNascimento.split("/")[0];

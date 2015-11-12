@@ -198,5 +198,13 @@ public class Facade {
 	public int getPopsUsuario() {
 		return controller.getPopsUsuario();
 	}
+	
+	public String atualizaRanking() {
+		return "";
+	}
+	
+	public String atualizaTrendingTopics() {
+		return controller.getTrendingTopics();
+	}
 
 }

@@ -2,7 +2,10 @@ package management;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import utils.MensagensDeErro;
 import core.usuario.AtributoUsuario;
@@ -15,13 +18,15 @@ import exceptions.trataveis.UnauthorizedException;
 public class Controller implements Serializable {
 
 	private static final long serialVersionUID = 3227105040361512397L;
-	List<Usuario> usuarios;
+	private List<Usuario> usuarios;
+	private Map<String, Integer> trendingTopics;
 	private Usuario usuarioLogado;
 
 	public Controller() {
 		usuarios = new ArrayList<Usuario>();
+		trendingTopics = new HashMap<String, Integer>();
 	}
-	
+
 	public Usuario getUsuarioLogado() {
 		return usuarioLogado;
 	}
@@ -125,9 +130,21 @@ public class Controller implements Serializable {
 		return true;
 	}
 
+	private void atualizaHastags(List<String> novasHastags) {
+		for (String hastag : novasHastags) {
+			if (trendingTopics.containsKey(hastag)) {
+				int votos = trendingTopics.get(hastag);
+				trendingTopics.put(hastag, ++votos);
+			} else {
+				trendingTopics.put(hastag, 1);
+			}
+		}
+	}
+
 	public void criaPost(String post, List<String> hastags,
 			List<String> audios, List<String> imagens, String data,
 			String mensagem) {
+		atualizaHastags(hastags);
 		usuarioLogado.postar(post, hastags, audios, imagens, data, mensagem);
 	}
 
@@ -163,16 +180,21 @@ public class Controller implements Serializable {
 	public int getQtdAmigos() {
 		return usuarioLogado.getQtdAmigos();
 	}
-	
+
 	public void aceitaAmizade(String email) {
 		Usuario novoAmigo = getUsuarioByEmail(email);
 		usuarioLogado.aceitarAmigo(novoAmigo);
 	}
 
-	public void curtir(String email, int indexPost) throws NotFoundException, UnauthorizedException {
+	public void curtir(String email, int indexPost) throws NotFoundException,
+			UnauthorizedException {
 		Usuario usuario = getUsuarioByEmail(email);
-		usuario.curtir(indexPost,usuarioLogado.getAtributo(AtributoUsuario.NOME),
-				usuarioLogado.getTipoPop().getPontosPop(), usuarioLogado.getTipoPop().getCurtirHastags());
+		List<String> curtirHastags = usuarioLogado.getTipoPop()
+				.getCurtirHastags();
+		usuario.curtir(indexPost, usuarioLogado
+				.getAtributo(AtributoUsuario.NOME), usuarioLogado.getTipoPop()
+				.getPontosPop(), curtirHastags);
+		atualizaHastags(curtirHastags);
 	}
 
 	public void removeAmigo(String email) {
@@ -188,10 +210,15 @@ public class Controller implements Serializable {
 		return usuarioLogado.getPopularidade();
 	}
 
-	public void rejeitarPost(String email, int indexPost) throws NotFoundException, UnauthorizedException {
+	public void rejeitarPost(String email, int indexPost)
+			throws NotFoundException, UnauthorizedException {
 		Usuario usuario = getUsuarioByEmail(email);
-		usuario.rejeitar(indexPost,usuarioLogado.getAtributo(AtributoUsuario.NOME),
-				usuarioLogado.getTipoPop().getPontosPop(), usuarioLogado.getTipoPop().getRejeitarHastags());	
+		List<String> rejeitarHastags = usuarioLogado.getTipoPop()
+				.getRejeitarHastags();
+		usuario.rejeitar(indexPost, usuarioLogado
+				.getAtributo(AtributoUsuario.NOME), usuarioLogado.getTipoPop()
+				.getPontosPop(), rejeitarHastags);
+		atualizaHastags(rejeitarHastags);
 	}
 
 	public int getPopPost(int post) {
@@ -216,5 +243,35 @@ public class Controller implements Serializable {
 
 	public int getPopsUsuario() {
 		return usuarioLogado.getPop();
+	}
+
+	public String getTrendingTopics() {
+		ArrayList<Entry<String, Integer>> entries = new ArrayList<Entry<String, Integer>>();
+
+		for (Entry<String, Integer> entry : trendingTopics.entrySet()) {
+			if (entries.size() == 0) {
+				entries.add(entry);
+			} else {
+				for (int i = 0; i < entries.size(); i++) {
+					if (entry.getValue() > entries.get(i).getValue()) {
+						entries.add(i, entry);
+						break;
+					}
+					if (entry.getValue() == entries.get(i).getValue()) {
+						if (entry
+								.getKey()
+								.toLowerCase()
+								.compareTo(
+										entries.get(i).getKey().toLowerCase()) == -1) {
+							entries.add(i, entry);
+							break;
+						}
+					}
+				}
+				entries.add(entries.size(), entry);
+			}
+		}
+
+		return entries.toString();
 	}
 }
