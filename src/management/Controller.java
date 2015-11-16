@@ -2,12 +2,11 @@ package management;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import utils.MensagensDeErro;
+import core.post.TrendingTop;
 import core.usuario.AtributoUsuario;
 import core.usuario.Usuario;
 import exceptions.naoTrataveis.BadFormatException;
@@ -19,12 +18,11 @@ public class Controller implements Serializable {
 
 	private static final long serialVersionUID = 3227105040361512397L;
 	private List<Usuario> usuarios;
-	private Map<String, Integer> trendingTopics;
+	private List<TrendingTop> trendingTopics;
 	private Usuario usuarioLogado;
 
 	public Controller() {
 		usuarios = new ArrayList<Usuario>();
-		trendingTopics = new HashMap<String, Integer>();
 	}
 
 	public Usuario getUsuarioLogado() {
@@ -130,13 +128,24 @@ public class Controller implements Serializable {
 		return true;
 	}
 
-	private void atualizaHastags(List<String> novasHastags) {
-		for (String hastag : novasHastags) {
-			if (trendingTopics.containsKey(hastag)) {
-				int votos = trendingTopics.get(hastag);
-				trendingTopics.put(hastag, ++votos);
-			} else {
-				trendingTopics.put(hastag, 1);
+	private void atualizaHastags() {
+		List<List<String>> hastags = getHastags();
+		trendingTopics = new ArrayList<TrendingTop>();
+
+		for (List<String> hastagsUser : hastags) {
+			for (String hastagUser : hastagsUser) {
+				String[] hastagArray = hastagUser.split(",");
+				for (int i = 0; i < hastagArray.length; i++) {
+					if (hastagArray[i].isEmpty()) 
+						break;
+					TrendingTop tt = new TrendingTop(hastagArray[i], 1);
+					if (trendingTopics.contains(tt)) {
+						int indexOfTT = trendingTopics.indexOf(tt);
+						trendingTopics.get(indexOfTT).votar();
+					} else {
+						trendingTopics.add(tt);
+					}
+				}
 			}
 		}
 	}
@@ -144,7 +153,6 @@ public class Controller implements Serializable {
 	public void criaPost(String post, List<String> hastags,
 			List<String> audios, List<String> imagens, String data,
 			String mensagem) {
-		atualizaHastags(hastags);
 		usuarioLogado.postar(post, hastags, audios, imagens, data, mensagem);
 	}
 
@@ -194,7 +202,6 @@ public class Controller implements Serializable {
 		usuario.curtir(indexPost, usuarioLogado
 				.getAtributo(AtributoUsuario.NOME), usuarioLogado.getTipoPop()
 				.getPontosPop(), curtirHastags);
-		atualizaHastags(curtirHastags);
 	}
 
 	public void removeAmigo(String email) {
@@ -218,7 +225,6 @@ public class Controller implements Serializable {
 		usuario.rejeitar(indexPost, usuarioLogado
 				.getAtributo(AtributoUsuario.NOME), usuarioLogado.getTipoPop()
 				.getPontosPop(), rejeitarHastags);
-		atualizaHastags(rejeitarHastags);
 	}
 
 	public int getPopPost(int post) {
@@ -246,32 +252,38 @@ public class Controller implements Serializable {
 	}
 
 	public String getTrendingTopics() {
-		ArrayList<Entry<String, Integer>> entries = new ArrayList<Entry<String, Integer>>();
-
-		for (Entry<String, Integer> entry : trendingTopics.entrySet()) {
-			if (entries.size() == 0) {
-				entries.add(entry);
-			} else {
-				for (int i = 0; i < entries.size(); i++) {
-					if (entry.getValue() > entries.get(i).getValue()) {
-						entries.add(i, entry);
-						break;
-					}
-					if (entry.getValue() == entries.get(i).getValue()) {
-						if (entry
-								.getKey()
-								.toLowerCase()
-								.compareTo(
-										entries.get(i).getKey().toLowerCase()) == -1) {
-							entries.add(i, entry);
-							break;
-						}
-					}
-				}
-				entries.add(entries.size(), entry);
-			}
+		atualizaHastags();
+		Collections.sort(trendingTopics);
+		StringBuilder top3 = new StringBuilder("Trending Topics: ");
+		
+		for (int i = 0; i < 3; i ++) {
+			top3.append(String.format(" (%d) ", 1 + i));
+			top3.append(trendingTopics.get(i).toString());
 		}
+		
+		return top3.toString();
+	}
 
-		return entries.toString();
+	private List<List<String>> getHastags() {
+		List<List<String>> hastags = new ArrayList<>();
+		for (Usuario usuario : usuarios) {
+			hastags.add(usuario.getHastags());
+		}
+		return hastags;
+	}
+
+	public String atualizaRanking() {
+		Collections.sort(usuarios);
+		StringBuilder populares = new StringBuilder("Mais Populares: ");
+		populares.append("(1) " + usuarios.get(usuarios.size() - 1) +  "; ");
+		populares.append("(2) " + usuarios.get(usuarios.size() - 2) +  "; ");
+		populares.append("(3) " + usuarios.get(usuarios.size() - 3) +  "; ");
+		
+		populares.append("| Menos Populares: ");
+		populares.append("(1) " + usuarios.get(0) +  "; ");
+		populares.append("(2) " + usuarios.get(1) +  "; ");
+		populares.append("(3) " + usuarios.get(2) +  ";");
+
+		return populares.toString();
 	}
 }

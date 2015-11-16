@@ -4,26 +4,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TestCurtirRejeitar {
-	
-	public Facade cadastraUsuarios() throws Exception {
-		Facade facade = new Facade();
-		facade.iniciaSistema();
-		
-		facade.cadastraUsuario
-		("Ana", "anita@ana.com", "poderosa", "15/05/1994");
-		facade.login("anita@ana.com", "poderosa");
-		facade.criaPost("A vida é #bela", "02/08/2015 09:30:00");
-		facade.logout();
-		
-		facade.cadastraUsuario
-		("Ana", "linda@ana.com", "poderosa", "15/05/1994");
-	
-		return facade;
-	}
 
 	@Test
 	public void testRejeitarInconePop() throws Exception {
-		Facade facade = cadastraUsuarios();
+		Facade facade = TestCommonUtils.cadastraUsuarios();
 		
 		facade.login("linda@ana.com", "poderosa");
 		facade.adicionaPops(1500);
@@ -38,7 +22,7 @@ public class TestCurtirRejeitar {
 	
 	@Test
 	public void testCurtirInconePop() throws Exception {
-		Facade facade = cadastraUsuarios();
+		Facade facade = TestCommonUtils.cadastraUsuarios();
 		facade.login("linda@ana.com", "poderosa");
 		facade.adicionaPops(1500);
 		Assert.assertEquals(facade.getPopularidade(), "Icone Pop");
@@ -52,7 +36,7 @@ public class TestCurtirRejeitar {
 	
 	@Test
 	public void testUpdateTextOfThePost() throws Exception {
-		Facade facade = cadastraUsuarios();
+		Facade facade = TestCommonUtils.cadastraUsuarios();
 		facade.login("linda@ana.com", "poderosa");
 		facade.adicionaPops(1500);
 		Assert.assertEquals(facade.getPopularidade(), "Icone Pop");
@@ -67,7 +51,7 @@ public class TestCurtirRejeitar {
 	
 	@Test
 	public void fechaSistema() throws Exception {
-		Facade facade = cadastraUsuarios();
+		Facade facade = TestCommonUtils.cadastraUsuarios();
 		
 		facade.login("linda@ana.com", "poderosa");
 		facade.adicionaPops(1500);
@@ -83,11 +67,7 @@ public class TestCurtirRejeitar {
 		facade.login("anita@ana.com", "poderosa");
 		Assert.assertEquals(1, facade.getNotificacoes());
 		Assert.assertEquals(-50, facade.getPopsUsuario());
-		facade.logout();	
-		
-		/*facade.fechaSistema();
-		facade.iniciaSistema();*/
-		
+		facade.logout();			
 	}
 
 }

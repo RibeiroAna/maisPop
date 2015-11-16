@@ -59,8 +59,10 @@ logout
 
 login email="walt@email.com.br" senha="Heisenberg"
 aceitaAmizade usuario="skyler@email.com.br"
+expect 1000 getPopsUsuario
 #Walter fica Icone Pop pois ja possui 950 + 310 = 1260
 adicionaPops pop=310
+expect 1310 getPopsUsuario
 expect "Icone Pop" getPopularidade
 criaPost  mensagem="Seu produto eh um refrigerante sabor cola, generico e mal feito. O meu eh Coca-Cola. Quer mesmo viver num mundo sem Coca-Cola? #cristal #Omelhor" data="30/09/2015 12:30:21"
 curtirPost amigo="jesse@email.com.br" post=2

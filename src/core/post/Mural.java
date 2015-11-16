@@ -92,4 +92,12 @@ public class Mural implements Serializable {
 		return postagens.get(indexPost).getNumsNegativos();
 	}
 
+	public List<String> printHastags() {
+		List<String> hastags = new ArrayList<String>();
+		for (Post post : postagens) {
+			hastags.add(post.getAtributo(AtributoPost.HASTAGS));
+		}
+		return hastags;
+	}
+
 }

@@ -200,11 +200,10 @@ public class Facade {
 	}
 	
 	public String atualizaRanking() {
-		return "";
+		return controller.atualizaRanking();
 	}
 	
 	public String atualizaTrendingTopics() {
 		return controller.getTrendingTopics();
 	}
-
 }

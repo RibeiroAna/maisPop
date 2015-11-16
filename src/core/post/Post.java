@@ -126,7 +126,11 @@ public class Post implements Serializable {
 			hastags.append(hastag);
 			hastags.append(",");
 		}
-		return hastags.toString().substring(0, hastags.toString().length() - 1);
+		if (hastags.length() > 1) {
+			return hastags.toString().substring(0,
+					hastags.toString().length() - 1);
+		}
+		return "";
 	}
 
 	private String getTextoMsg() {

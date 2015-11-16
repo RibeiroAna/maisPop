@@ -20,12 +20,13 @@ public class Main {
 		 testes.add("easyAccept/teste_aceitacao/usecase_6.txt");
 		 testes.add("easyAccept/teste_aceitacao/usecase_7.txt");
 		 
-		 //Deletando para sempre passar nos testes
-		 File file = new File("backupSistema/sistemaPop"); 
+		 //Deletando para sempre passar nos testes	
+		 File file = new File("backupSistema/sistemaPop"); 	
 		 file.delete();
 		 
 		 EasyAcceptFacade eaFacade = new EasyAcceptFacade(facade, testes);
 		 eaFacade.executeTests();
+		
 		 System.out.println(eaFacade.getCompleteResults());
 	}
 }

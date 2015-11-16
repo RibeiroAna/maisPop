@@ -16,7 +16,7 @@ import exceptions.naoTrataveis.BadFormatException;
 import exceptions.naoTrataveis.BadRequestException;
 import exceptions.trataveis.UnauthorizedException;
 
-public class Usuario implements Serializable {
+public class Usuario implements Serializable, Comparable<Usuario> {
 
 	private static final long serialVersionUID = -5997328240008153153L;
 	private String nome;
@@ -252,11 +252,7 @@ public class Usuario implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Usuario [nome=" + nome + ", senha=" + senha + ", email="
-				+ email + ", imagemPerfilPath=" + imagemPerfilPath
-				+ ", dataNascimento=" + dataNascimento + ", mural=" + mural
-				+ ", pedidosDeAmizadePedente=" + pedidosDeAmizadePedente
-				+ ", amigos=" + amigos + "]";
+		return nome + " " + pops;
 	}
 
 	public String getPostAtributo(String atributo, int post) {
@@ -308,6 +304,7 @@ public class Usuario implements Serializable {
 	}
 
 	public void adicionaPops(int pops) {
+		this.pops -= settedPops;
 		settedPops += pops;
 		this.pops += settedPops;
 		calculaPopularidade();
@@ -337,6 +334,23 @@ public class Usuario implements Serializable {
 
 	public int qtdRejeicoesDePost(int post) {
 		return mural.qtdRejeicoesDePost(post);
+	}
+
+	public List<String> getHastags() {
+		return mural.printHastags();
+	}
+
+	@Override
+	public int compareTo(Usuario o) {
+		if (this.pops > o.pops){
+			return 1;			
+		}
+		if (this.pops < o.pops) {
+			return -1;
+		} else {
+		    return this.nome.toUpperCase()
+		    		.compareTo(o.nome.toUpperCase());
+		}
 	}
 
 }
