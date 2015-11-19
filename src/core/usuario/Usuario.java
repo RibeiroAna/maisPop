@@ -8,6 +8,7 @@ import utils.MensagensDeErro;
 import utils.MensagensDeNotificacao;
 import utils.ValidaDados;
 import core.post.Mural;
+import core.post.Post;
 import core.usuario.tipoPop.CelebridadePop;
 import core.usuario.tipoPop.IconePop;
 import core.usuario.tipoPop.Normal;
@@ -73,6 +74,10 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 
 	public TipoPop getTipoPop() {
 		return tipoPop;
+	}
+	
+	public int getTotalPost() {
+		return mural.getTotalPost();
 	}
 
 	public void login(String email, String senha) throws UnauthorizedException {
@@ -351,6 +356,10 @@ public class Usuario implements Serializable, Comparable<Usuario> {
 		    return this.nome.toUpperCase()
 		    		.compareTo(o.nome.toUpperCase());
 		}
+	}
+
+	public List<Post> getPostsOrdemPop() {
+		return mural.getPostsOrdemPop();
 	}
 
 }

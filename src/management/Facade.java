@@ -206,4 +206,12 @@ public class Facade {
 	public String atualizaTrendingTopics() {
 		return controller.getTrendingTopics();
 	}
+	
+	public int getTotalPosts() {
+		return controller.getTotalPosts();
+	}
+	
+	public String getPostFeedNoticiasMaisPopulares(int post) {
+		return controller.getPostFeedNoticiasMaisPopulares(post);
+	}
 }

@@ -100,4 +100,12 @@ public class Mural implements Serializable {
 		return hastags;
 	}
 
+	public int getTotalPost() {
+		return postagens.size();
+	}
+
+	public List<Post> getPostsOrdemPop() {		
+		return postagens;
+	}
+
 }

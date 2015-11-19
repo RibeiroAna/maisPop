@@ -9,6 +9,8 @@ import utils.MensagensDeErro;
 import core.post.TrendingTop;
 import core.usuario.AtributoUsuario;
 import core.usuario.Usuario;
+import core.post.Post;
+import core.post.comparator.ComparatorPops;
 import exceptions.naoTrataveis.BadFormatException;
 import exceptions.naoTrataveis.BadRequestException;
 import exceptions.naoTrataveis.NotFoundException;
@@ -26,6 +28,10 @@ public class Controller implements Serializable {
 	}
 
 	public Usuario getUsuarioLogado() {
+		if (usuarioLogado == null) {
+			throw new BadRequestException(
+					MensagensDeErro.CAUSA_USUARIO_DESLOGADO);
+		}
 		return usuarioLogado;
 	}
 
@@ -136,7 +142,7 @@ public class Controller implements Serializable {
 			for (String hastagUser : hastagsUser) {
 				String[] hastagArray = hastagUser.split(",");
 				for (int i = 0; i < hastagArray.length; i++) {
-					if (hastagArray[i].isEmpty()) 
+					if (hastagArray[i].isEmpty())
 						break;
 					TrendingTop tt = new TrendingTop(hastagArray[i], 1);
 					if (trendingTopics.contains(tt)) {
@@ -214,7 +220,7 @@ public class Controller implements Serializable {
 	}
 
 	public String getPopularidade() {
-		return usuarioLogado.getPopularidade();
+		return getUsuarioLogado().getPopularidade();
 	}
 
 	public void rejeitarPost(String email, int indexPost)
@@ -228,15 +234,15 @@ public class Controller implements Serializable {
 	}
 
 	public int getPopPost(int post) {
-		return usuarioLogado.getPopPost(post);
+		return getUsuarioLogado().getPopPost(post);
 	}
 
 	public int qtdCurtidasDePost(int post) {
-		return usuarioLogado.qtdCurtidasDePost(post);
+		return getUsuarioLogado().qtdCurtidasDePost(post);
 	}
 
 	public int qtdRejeicoesDePost(int post) {
-		return usuarioLogado.qtdRejeicoesDePost(post);
+		return getUsuarioLogado().qtdRejeicoesDePost(post);
 	}
 
 	public int getPopsUsuario(String email) throws BadRequestException {
@@ -248,19 +254,19 @@ public class Controller implements Serializable {
 	}
 
 	public int getPopsUsuario() {
-		return usuarioLogado.getPop();
+		return getUsuarioLogado().getPop();
 	}
 
 	public String getTrendingTopics() {
 		atualizaHastags();
 		Collections.sort(trendingTopics);
 		StringBuilder top3 = new StringBuilder("Trending Topics: ");
-		
-		for (int i = 0; i < 3; i ++) {
+
+		for (int i = 0; i < 3; i++) {
 			top3.append(String.format(" (%d) ", 1 + i));
 			top3.append(trendingTopics.get(i).toString());
 		}
-		
+
 		return top3.toString();
 	}
 
@@ -275,15 +281,29 @@ public class Controller implements Serializable {
 	public String atualizaRanking() {
 		Collections.sort(usuarios);
 		StringBuilder populares = new StringBuilder("Mais Populares: ");
-		populares.append("(1) " + usuarios.get(usuarios.size() - 1) +  "; ");
-		populares.append("(2) " + usuarios.get(usuarios.size() - 2) +  "; ");
-		populares.append("(3) " + usuarios.get(usuarios.size() - 3) +  "; ");
-		
+		populares.append("(1) " + usuarios.get(usuarios.size() - 1) + "; ");
+		populares.append("(2) " + usuarios.get(usuarios.size() - 2) + "; ");
+		populares.append("(3) " + usuarios.get(usuarios.size() - 3) + "; ");
+
 		populares.append("| Menos Populares: ");
-		populares.append("(1) " + usuarios.get(0) +  "; ");
-		populares.append("(2) " + usuarios.get(1) +  "; ");
-		populares.append("(3) " + usuarios.get(2) +  ";");
+		populares.append("(1) " + usuarios.get(0) + "; ");
+		populares.append("(2) " + usuarios.get(1) + "; ");
+		populares.append("(3) " + usuarios.get(2) + ";");
 
 		return populares.toString();
+	}
+
+	public int getTotalPosts() {
+		return getUsuarioLogado().getTotalPost();
+	}
+
+	public String getPostFeedNoticiasMaisPopulares(int post) {
+		ArrayList<Post> todosPosts = new ArrayList<>();
+		for (Usuario usuario : usuarios) {
+			todosPosts.addAll(usuario.getPostsOrdemPop());
+		}
+		Collections.sort(todosPosts, new ComparatorPops());
+		System.out.println(todosPosts);
+		return todosPosts.get(post).getMensagem();
 	}
 }

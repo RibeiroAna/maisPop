@@ -26,7 +26,16 @@ public class Main {
 		 
 		 EasyAcceptFacade eaFacade = new EasyAcceptFacade(facade, testes);
 		 eaFacade.executeTests();
-		
 		 System.out.println(eaFacade.getCompleteResults());
+
+		 //Teste 8 lê arquivos dos testes anteriores, mas ele mesmo não conversa com eles
+		 file.delete();
+		 List<String> testesNovos = new ArrayList<String>();
+		 testesNovos.add("easyAccept/teste_aceitacao/usecase_8.txt");
+		 testesNovos.add("easyAccept/teste_aceitacao/usecase_9.txt");
+		 testesNovos.add("easyAccept/teste_aceitacao/usecase_10.txt"); 
+		 EasyAcceptFacade eaFacade8 = new EasyAcceptFacade(facade, testesNovos);
+		 eaFacade8.executeTests();
+		 System.out.println(eaFacade8.getCompleteResults());	 
 	}
 }
