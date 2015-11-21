@@ -7,15 +7,15 @@ public class TrendingTop implements Comparable<TrendingTop>, Serializable {
 
 	private static final long serialVersionUID = -807303160722835920L;
 	private String tt;
-	private Integer votos;
+	private Integer aparicoes;
 	
-	public TrendingTop(String tt, int votos) {
+	public TrendingTop(String tt, int aparicoes) {
 		this.tt = tt;
-		this.votos = new Integer(votos);
+		this.aparicoes = new Integer(aparicoes);
 	}
 	
 	public void votar() {
-		votos++;
+		aparicoes++;
 	}
 
 
@@ -46,16 +46,16 @@ public class TrendingTop implements Comparable<TrendingTop>, Serializable {
 
 	@Override
 	public int compareTo(TrendingTop o) {
-		if (this.votos.compareTo(o.votos) == 0) {
+		if (this.aparicoes.compareTo(o.aparicoes) == 0) {
 			return this.tt.toUpperCase().compareTo(o.tt.toUpperCase());
 		} else {
-			return this.votos.compareTo(o.votos) * (-1);
+			return this.aparicoes.compareTo(o.aparicoes) * (-1);
 		}
 	}
 	
 	@Override
 	public String toString() {
-		return tt + ": " + votos.toString() + ";";
+		return tt + ": " + aparicoes.toString() + ";";
 	}
 	
 
